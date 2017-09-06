@@ -3,21 +3,23 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iMotto.Api", "iMotto.Api\iMotto.Api.csproj", "{48E65FA5-20E3-4D5D-A6E8-3C1BB475912B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iMotto.Api", "iMotto.Api\iMotto.Api.csproj", "{48E65FA5-20E3-4D5D-A6E8-3C1BB475912B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iMotto.Adapter", "iMotto.Adapter\iMotto.Adapter.csproj", "{BAA1E288-FA7E-43E4-BDEA-DF3F54DD88CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iMotto.Data.Entities", "iMotto.Data.Entities\iMotto.Data.Entities.csproj", "{18752CD8-C679-4311-8B7C-E11299D66216}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iMotto.Data.Entities", "iMotto.Data.Entities\iMotto.Data.Entities.csproj", "{18752CD8-C679-4311-8B7C-E11299D66216}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iMotto.Data", "iMotto.Data\iMotto.Data.csproj", "{BF53E9C3-9A2F-49F5-8941-07DFFC47D98F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iMotto.Data", "iMotto.Data\iMotto.Data.csproj", "{BF53E9C3-9A2F-49F5-8941-07DFFC47D98F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iMotto.Data.Dapper", "iMotto.Data.Dapper\iMotto.Data.Dapper.csproj", "{9A25E9DD-430B-40C1-82F9-D2828EA97B03}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iMotto.Data.Dapper", "iMotto.Data.Dapper\iMotto.Data.Dapper.csproj", "{9A25E9DD-430B-40C1-82F9-D2828EA97B03}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iMotto.Common", "iMotto.Common\iMotto.Common.csproj", "{C4CDB20A-25DD-4F6C-BEE8-2FC396B17097}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iMotto.Common", "iMotto.Common\iMotto.Common.csproj", "{C4CDB20A-25DD-4F6C-BEE8-2FC396B17097}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iMotto.Cache", "iMotto.Cache\iMotto.Cache.csproj", "{5B23448C-F5E9-450C-B93F-48557F720490}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iMotto.Cache", "iMotto.Cache\iMotto.Cache.csproj", "{5B23448C-F5E9-450C-B93F-48557F720490}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iMotto.Events", "iMotto.Events\iMotto.Events.csproj", "{B5C9C55B-1D7C-49B4-A3BF-1817F5F60C55}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iMotto.Events", "iMotto.Events\iMotto.Events.csproj", "{B5C9C55B-1D7C-49B4-A3BF-1817F5F60C55}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iMotto.Adapter.Common", "iMotto.Adapter.Common\iMotto.Adapter.Common.csproj", "{EC3A1FB3-0FD3-4A99-8AB9-240E6E8477FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +59,10 @@ Global
 		{B5C9C55B-1D7C-49B4-A3BF-1817F5F60C55}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B5C9C55B-1D7C-49B4-A3BF-1817F5F60C55}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B5C9C55B-1D7C-49B4-A3BF-1817F5F60C55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC3A1FB3-0FD3-4A99-8AB9-240E6E8477FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC3A1FB3-0FD3-4A99-8AB9-240E6E8477FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC3A1FB3-0FD3-4A99-8AB9-240E6E8477FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC3A1FB3-0FD3-4A99-8AB9-240E6E8477FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -7,10 +7,24 @@ namespace iMotto.Cache
 {
     public class CacheManager : ICacheManager
     {
+        private bool _inited = false;
+        private readonly IEventPublisher _eventPublisher;
         private readonly Dictionary<Type, object> Caches = new Dictionary<Type, object>();
         
         public CacheManager(IEventPublisher eventPublisher)
         {
+            _eventPublisher = eventPublisher;
+        }
+
+        public void Initialize()
+        {
+            if (_inited)
+            {
+                return;
+            }
+
+            _inited = true;
+
             IOnlineUserCache onlineUserCache = new OnlineUserCache();
             IEvaluatingMottoCache evaluatingMottoCache = new EvaluatingMottoCache();
             IVerifyCodeCache verifyCodeCache = new VerifyCodeCache();
@@ -27,65 +41,64 @@ namespace iMotto.Cache
             Caches.Add(typeof(IOnlineUserCache), onlineUserCache);
             Caches.Add(typeof(ICollectionCache), collectionCache);
             Caches.Add(typeof(ISyncRootCache), syncRootCache);
-            
-            eventPublisher.RegisterEventHandler<DeviceRegEvent>(deviceSignCache.HandleEvent);
-            eventPublisher.RegisterEventHandler<DisplayNoticeEvent>(deviceSignCache.HandleEvent);
 
-            eventPublisher.RegisterEventHandler<SendVerifyCodeEvent>(verifyCodeCache.HandleEvent);
+            _eventPublisher.RegisterEventHandler<DeviceRegEvent>(deviceSignCache.HandleEvent);
+            _eventPublisher.RegisterEventHandler<DisplayNoticeEvent>(deviceSignCache.HandleEvent);
 
-            eventPublisher.RegisterEventHandler<UserLoginEvent>(onlineUserCache.HandleEvent);
+            _eventPublisher.RegisterEventHandler<SendVerifyCodeEvent>(verifyCodeCache.HandleEvent);
 
-            eventPublisher.RegisterEventHandler<LoadUserInfoEvent>(userInfoCache.HandleEvent);
+            _eventPublisher.RegisterEventHandler<UserLoginEvent>(onlineUserCache.HandleEvent);
 
-            eventPublisher.RegisterEventHandler<CreateMottoEvent>(evaluatingMottoCache.HandleEvent);
-            eventPublisher.RegisterEventHandler<CreateMottoEvent>(userInfoCache.HandleEvent);
+            _eventPublisher.RegisterEventHandler<LoadUserInfoEvent>(userInfoCache.HandleEvent);
 
-            eventPublisher.RegisterEventHandler<CreateVoteEvent>(evaluatingMottoCache.HandleEvent);
-            eventPublisher.RegisterEventHandler<CreateVoteEvent>(userInfoCache.HandleEvent);
+            _eventPublisher.RegisterEventHandler<CreateMottoEvent>(evaluatingMottoCache.HandleEvent);
+            _eventPublisher.RegisterEventHandler<CreateMottoEvent>(userInfoCache.HandleEvent);
 
-            eventPublisher.RegisterEventHandler<LoveMottoEvent>(evaluatingMottoCache.HandleEvent);
-            eventPublisher.RegisterEventHandler<LoveMottoEvent>(userInfoCache.HandleEvent);
+            _eventPublisher.RegisterEventHandler<CreateVoteEvent>(evaluatingMottoCache.HandleEvent);
+            _eventPublisher.RegisterEventHandler<CreateVoteEvent>(userInfoCache.HandleEvent);
 
-            eventPublisher.RegisterEventHandler<UnloveMottoEvent>(evaluatingMottoCache.HandleEvent);
-            eventPublisher.RegisterEventHandler<UnloveMottoEvent>(userInfoCache.HandleEvent);
+            _eventPublisher.RegisterEventHandler<LoveMottoEvent>(evaluatingMottoCache.HandleEvent);
+            _eventPublisher.RegisterEventHandler<LoveMottoEvent>(userInfoCache.HandleEvent);
 
-            eventPublisher.RegisterEventHandler<CreateReviewEvent>(evaluatingMottoCache.HandleEvent);
-            eventPublisher.RegisterEventHandler<CreateReviewEvent>(userInfoCache.HandleEvent);
+            _eventPublisher.RegisterEventHandler<UnloveMottoEvent>(evaluatingMottoCache.HandleEvent);
+            _eventPublisher.RegisterEventHandler<UnloveMottoEvent>(userInfoCache.HandleEvent);
 
-            eventPublisher.RegisterEventHandler<RemoveReviewEvent>(evaluatingMottoCache.HandleEvent);
-            eventPublisher.RegisterEventHandler<RemoveReviewEvent>(userInfoCache.HandleEvent);
+            _eventPublisher.RegisterEventHandler<CreateReviewEvent>(evaluatingMottoCache.HandleEvent);
+            _eventPublisher.RegisterEventHandler<CreateReviewEvent>(userInfoCache.HandleEvent);
 
-            eventPublisher.RegisterEventHandler<CreateCollectionEvent>(userInfoCache.HandleEvent);
+            _eventPublisher.RegisterEventHandler<RemoveReviewEvent>(evaluatingMottoCache.HandleEvent);
+            _eventPublisher.RegisterEventHandler<RemoveReviewEvent>(userInfoCache.HandleEvent);
+
+            _eventPublisher.RegisterEventHandler<CreateCollectionEvent>(userInfoCache.HandleEvent);
             //eventPublisher.RegisterEventHandler<CreateCollectionEvent>(collectionCache.HandleEvent);
 
-            eventPublisher.RegisterEventHandler<CollectMottoEvent>(userInfoCache.HandleEvent);
-            eventPublisher.RegisterEventHandler<CollectMottoEvent>(collectionCache.HandleEvent);
+            _eventPublisher.RegisterEventHandler<CollectMottoEvent>(userInfoCache.HandleEvent);
+            _eventPublisher.RegisterEventHandler<CollectMottoEvent>(collectionCache.HandleEvent);
 
-            eventPublisher.RegisterEventHandler<UnCollectMottoEvent>(userInfoCache.HandleEvent);
-            eventPublisher.RegisterEventHandler<UnCollectMottoEvent>(collectionCache.HandleEvent);
+            _eventPublisher.RegisterEventHandler<UnCollectMottoEvent>(userInfoCache.HandleEvent);
+            _eventPublisher.RegisterEventHandler<UnCollectMottoEvent>(collectionCache.HandleEvent);
 
-            eventPublisher.RegisterEventHandler<LoveCollectionEvent>(userInfoCache.HandleEvent);
-            eventPublisher.RegisterEventHandler<LoveCollectionEvent>(collectionCache.HandleEvent);
+            _eventPublisher.RegisterEventHandler<LoveCollectionEvent>(userInfoCache.HandleEvent);
+            _eventPublisher.RegisterEventHandler<LoveCollectionEvent>(collectionCache.HandleEvent);
 
-            eventPublisher.RegisterEventHandler<UnLoveCollectionEvent>(userInfoCache.HandleEvent);
-            eventPublisher.RegisterEventHandler<UnLoveCollectionEvent>(collectionCache.HandleEvent);
+            _eventPublisher.RegisterEventHandler<UnLoveCollectionEvent>(userInfoCache.HandleEvent);
+            _eventPublisher.RegisterEventHandler<UnLoveCollectionEvent>(collectionCache.HandleEvent);
 
-            eventPublisher.RegisterEventHandler<UpdateUserNameEvent>(userInfoCache.HandleEvent);
+            _eventPublisher.RegisterEventHandler<UpdateUserNameEvent>(userInfoCache.HandleEvent);
 
-            eventPublisher.RegisterEventHandler<UpdateUserThumbEvent>(userInfoCache.HandleEvent);
+            _eventPublisher.RegisterEventHandler<UpdateUserThumbEvent>(userInfoCache.HandleEvent);
 
-            eventPublisher.RegisterEventHandler<UpdateSexEvent>(userInfoCache.HandleEvent);
+            _eventPublisher.RegisterEventHandler<UpdateSexEvent>(userInfoCache.HandleEvent);
 
-            eventPublisher.RegisterEventHandler<LoveUserEvent>(userInfoCache.HandleEvent);
-            eventPublisher.RegisterEventHandler<UnLoveUserEvent>(userInfoCache.HandleEvent);
+            _eventPublisher.RegisterEventHandler<LoveUserEvent>(userInfoCache.HandleEvent);
+            _eventPublisher.RegisterEventHandler<UnLoveUserEvent>(userInfoCache.HandleEvent);
 
-            eventPublisher.RegisterEventHandler<BanUserEvent>(userInfoCache.HandleEvent);
-            eventPublisher.RegisterEventHandler<UnBanUserEvent>(userInfoCache.HandleEvent);
+            _eventPublisher.RegisterEventHandler<BanUserEvent>(userInfoCache.HandleEvent);
+            _eventPublisher.RegisterEventHandler<UnBanUserEvent>(userInfoCache.HandleEvent);
 
-            eventPublisher.RegisterEventHandler<SendPrivateMsgEvent>(userInfoCache.HandleEvent);
+            _eventPublisher.RegisterEventHandler<SendPrivateMsgEvent>(userInfoCache.HandleEvent);
         }
 
-       
 
         public T GetCache<T>() where T : class
         {

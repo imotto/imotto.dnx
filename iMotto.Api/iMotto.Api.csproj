@@ -16,4 +16,10 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\iMotto.Adapter.Common\iMotto.Adapter.Common.csproj" />
+    <ProjectReference Include="..\iMotto.Adapter\iMotto.Adapter.csproj" />
+    <ProjectReference Include="..\iMotto.Data.Dapper\iMotto.Data.Dapper.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -8,6 +8,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using iMotto.Adapter;
+using iMotto.Adapter.Common;
+using iMotto.Common.Settings;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace iMotto.Api
 {
@@ -23,6 +27,15 @@ namespace iMotto.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddOptions();
+            services.Configure<ConsulSetting>(Configuration.GetSection("Consul"));
+            services.TryAddSingleton<ISettingProvider, SettingProvider>();
+
+            services.AddDataDapper();
+            services.AddCache();
+            services.AddAdapter();
+            services.AddCommonAdapter();
+
             services.AddMvc();
         }
 
@@ -34,7 +47,19 @@ namespace iMotto.Api
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseMvc();
+            app.UseCache();
+            app.UseCommonAdapter();
+
+            app.UseMvc(routes => {
+                routes.MapRoute(
+                    name: "adapter",
+                    template: "Api/{code}",
+                    defaults: new { controller = "Adapter", action = "Index" });
+
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=home}/{action=index}/{id?}");
+            });
         }
     }
 }
