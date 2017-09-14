@@ -14,5 +14,7 @@ namespace iMotto.Common.Settings
         ISmsSetting GetSmsSetting();
 
         IDbSetting GetDbSetting();
+
+        ICacheSetting GetCacheSetting();
     }
 }

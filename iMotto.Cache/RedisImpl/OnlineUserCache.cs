@@ -7,10 +7,17 @@ namespace iMotto.Cache.RedisImpl
     {
         private const string ONLINE_USER_SIGN_KEY_FMT = "OLU{0}";
         private const string USER_ROLE_KEY_FMT = "UIR{0:32N}{1}";
+        private readonly RedisHelper _redisHelper;
+
+        public OnlineUserCache(RedisHelper redisHelper)
+        {
+            _redisHelper = redisHelper;
+        }
+
 
         public Tuple<string, string> GetOnlineUserViaSignature(string sign)
         {
-            var wrapper = RedisHelper.StringGet(string.Format(ONLINE_USER_SIGN_KEY_FMT, sign));
+            var wrapper = _redisHelper.StringGet(string.Format(ONLINE_USER_SIGN_KEY_FMT, sign));
 
             if (!string.IsNullOrWhiteSpace(wrapper) && wrapper.Length == 64)
             {
@@ -23,7 +30,7 @@ namespace iMotto.Cache.RedisImpl
 
         public bool HasUserInRole(string userId, string role)
         {
-            var redis = RedisHelper.GetDatabase();
+            var redis = _redisHelper.GetDatabase();
             var result = (string)redis.StringGet(string.Format(USER_ROLE_KEY_FMT, userId, role));
 
             return "YES".Equals(result);
@@ -32,14 +39,14 @@ namespace iMotto.Cache.RedisImpl
 
         public void HandleEvent(UserLoginEvent @event)
         {
-            RedisHelper.StringSet(string.Format(ONLINE_USER_SIGN_KEY_FMT, @event.Signature),
+            _redisHelper.StringSet(string.Format(ONLINE_USER_SIGN_KEY_FMT, @event.Signature),
                 string.Format("{0}{1}", @event.UserId, @event.Token),TimeSpan.FromDays(31));
         }
 
        
         public void Logout(string sign)
         {
-            RedisHelper.KeyDelete(string.Format(ONLINE_USER_SIGN_KEY_FMT, sign));
+            _redisHelper.KeyDelete(string.Format(ONLINE_USER_SIGN_KEY_FMT, sign));
         }
     }
 }

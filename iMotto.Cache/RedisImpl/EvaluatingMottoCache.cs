@@ -22,10 +22,16 @@ namespace iMotto.Cache.RedisImpl
         private const string F_UID = "UID";
         private const string F_SCORE = "SCORE";
         private const string F_UP = "UP";
+        private readonly RedisHelper _redisHelper;
+
+        public EvaluatingMottoCache(RedisHelper redisHelper)
+        {
+            _redisHelper = redisHelper;
+        }
 
         public Motto FindMotto(int theDay, long mid)
         {
-            var entries = RedisHelper.HashGetAll(string.Format(KEY_EVAL_MOTTO_FMT, theDay, mid));
+            var entries = _redisHelper.HashGetAll(string.Format(KEY_EVAL_MOTTO_FMT, theDay, mid));
             if (entries != null && entries.Length > 0)
             {
                 Motto motto = ConvertFromHashEntries(entries);
@@ -43,7 +49,7 @@ namespace iMotto.Cache.RedisImpl
 
         public async Task<Motto[]> GetMottos(int theDay, int page, int pSize)
         {
-            var db = RedisHelper.GetDatabase();
+            var db = _redisHelper.GetDatabase();
             var ids = db.SortedSetRangeByScore(string.Format(KEY_RANK_MOTTO_FMT, theDay.ToString()),
                 order: Order.Descending,
                 skip: (page - 1) * pSize,
@@ -85,7 +91,7 @@ namespace iMotto.Cache.RedisImpl
         {
             if (Utils.GetTheDay(DateTime.Now.AddDays(-10)) < @event.TheDay)
             {
-                RedisHelper.HashIncrement(
+                _redisHelper.HashIncrement(
                 string.Format(KEY_EVAL_MOTTO_FMT, @event.TheDay, @event.Review.MID),
                 F_REVIEWS);
             }
@@ -95,7 +101,7 @@ namespace iMotto.Cache.RedisImpl
         {
             if (Utils.GetTheDay(DateTime.Now.AddDays(-10)) < @event.TheDay)
             {
-                RedisHelper.HashDecrement(
+                _redisHelper.HashDecrement(
                 string.Format(KEY_EVAL_MOTTO_FMT, @event.TheDay, @event.Review),
                 F_REVIEWS);
             }
@@ -105,7 +111,7 @@ namespace iMotto.Cache.RedisImpl
         {
             if (Utils.GetTheDay(DateTime.Now.AddDays(-10)) < @event.LoveMotto.TheDay)
             {
-                RedisHelper.HashDecrement(string.Format(KEY_EVAL_MOTTO_FMT, @event.LoveMotto.TheDay, @event.LoveMotto.MID),
+                _redisHelper.HashDecrement(string.Format(KEY_EVAL_MOTTO_FMT, @event.LoveMotto.TheDay, @event.LoveMotto.MID),
                     F_LOVES);
             }
         }
@@ -114,7 +120,7 @@ namespace iMotto.Cache.RedisImpl
         {
             if (Utils.GetTheDay(DateTime.Now.AddDays(-10)) < @event.LoveMotto.TheDay)
             {
-                var redis = RedisHelper.GetDatabase();
+                var redis = _redisHelper.GetDatabase();
                 redis.HashIncrement(string.Format(KEY_EVAL_MOTTO_FMT, @event.LoveMotto.TheDay, @event.LoveMotto.MID),
                     F_LOVES);
             }
@@ -125,31 +131,31 @@ namespace iMotto.Cache.RedisImpl
             var mkey = string.Format(KEY_EVAL_MOTTO_FMT, @event.TheDay, @event.MID);
             if (@event.Vote == 1)
             {  
-                var entries = RedisHelper.HashGetAll(mkey);
+                var entries = _redisHelper.HashGetAll(mkey);
                 if (entries != null && entries.Length > 0)
                 {
                     var motto = ConvertFromHashEntries(entries);
                     motto.Up += 1;
                     motto.Score = Utils.Hot(motto.Up, motto.Down, motto.AddTime);
 
-                    RedisHelper.HashSet(mkey, new HashEntry[] { new HashEntry(F_UP, motto.Up), new HashEntry(F_SCORE, motto.Score)});
+                    _redisHelper.HashSet(mkey, new HashEntry[] { new HashEntry(F_UP, motto.Up), new HashEntry(F_SCORE, motto.Score)});
 
-                    RedisHelper.SortedSetAdd(string.Format(KEY_RANK_MOTTO_FMT, @event.TheDay),
+                    _redisHelper.SortedSetAdd(string.Format(KEY_RANK_MOTTO_FMT, @event.TheDay),
                         @event.MID.ToString(), motto.Score);
                 }
             }
             else if (@event.Vote == -1)
             {
-                var entries = RedisHelper.HashGetAll(mkey);
+                var entries = _redisHelper.HashGetAll(mkey);
                 if (entries != null && entries.Length > 0)
                 {
                     var motto = ConvertFromHashEntries(entries);
                     motto.Down += 1;
                     motto.Score = Utils.Hot(motto.Up, motto.Down, motto.AddTime);
 
-                    RedisHelper.HashSet(mkey, new HashEntry[] { new HashEntry(F_DOWN, motto.Down), new HashEntry(F_SCORE, motto.Score) });
+                    _redisHelper.HashSet(mkey, new HashEntry[] { new HashEntry(F_DOWN, motto.Down), new HashEntry(F_SCORE, motto.Score) });
 
-                    RedisHelper.SortedSetAdd(string.Format(KEY_RANK_MOTTO_FMT, @event.TheDay),
+                    _redisHelper.SortedSetAdd(string.Format(KEY_RANK_MOTTO_FMT, @event.TheDay),
                         @event.MID.ToString(), motto.Score);
                 }
             }
@@ -162,11 +168,11 @@ namespace iMotto.Cache.RedisImpl
             @event.Motto.Score = Utils.Hot(@event.Motto.Up, @event.Motto.Down, @event.Motto.AddTime);
 
             var entries = ConvertToHashEntries(@event.Motto);
-            RedisHelper.HashSet(string.Format(KEY_EVAL_MOTTO_FMT, theday, @event.Motto.ID),
+            _redisHelper.HashSet(string.Format(KEY_EVAL_MOTTO_FMT, theday, @event.Motto.ID),
                 entries,
                 TimeSpan.FromDays(14));
 
-            RedisHelper.SortedSetAdd(string.Format(KEY_RANK_MOTTO_FMT, theday), @event.Motto.ID.ToString(), @event.Motto.Score);
+            _redisHelper.SortedSetAdd(string.Format(KEY_RANK_MOTTO_FMT, theday), @event.Motto.ID.ToString(), @event.Motto.Score);
 
         }
 

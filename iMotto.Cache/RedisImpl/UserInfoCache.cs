@@ -44,10 +44,16 @@ namespace iMotto.Cache.RedisImpl
         private const string F_S_BANS = "S_BAN";
         private const string F_S_REVENUE = "S_REVENUE";
         private const string F_S_BALANCE = "S_BALANCE";
+        private readonly RedisHelper _redisHelper;
+
+        public UserInfoCache(RedisHelper redisHelper)
+        {
+            _redisHelper = redisHelper;
+        }
 
         public User GetUserById(string uid)
         {
-            var redis = RedisHelper.GetDatabase();
+            var redis = _redisHelper.GetDatabase();
             var entries = redis.HashGetAll(string.Format(KEY_USER_INFO_FMT, uid));
 
             if (entries != null && entries.Length >= 16) //如果用户的信息数缺失时，将会重新加载用户信息
@@ -62,7 +68,7 @@ namespace iMotto.Cache.RedisImpl
 
         public void HandleEvent(LoveMottoEvent @event)
         {
-            var redis = RedisHelper.GetDatabase();
+            var redis = _redisHelper.GetDatabase();
             redis.HashIncrement(string.Format(KEY_USER_INFO_FMT, @event.LoveMotto.UID),
                 F_S_LOVED_MOTTOS);
 
@@ -72,7 +78,7 @@ namespace iMotto.Cache.RedisImpl
 
         public void HandleEvent(CreateReviewEvent @event)
         {
-            var redis = RedisHelper.GetDatabase();
+            var redis = _redisHelper.GetDatabase();
 
             redis.HashIncrement(string.Format(KEY_USER_INFO_FMT, @event.Review.UID),
                 F_S_REVIEWS);
@@ -83,7 +89,7 @@ namespace iMotto.Cache.RedisImpl
 
         public void HandleEvent(RemoveReviewEvent @event)
         {
-            var redis = RedisHelper.GetDatabase();
+            var redis = _redisHelper.GetDatabase();
 
             redis.HashDecrement(string.Format(KEY_USER_INFO_FMT, @event.Review.UID),
                 F_S_REVIEWS);
@@ -95,7 +101,7 @@ namespace iMotto.Cache.RedisImpl
 
         public void HandleEvent(UnloveMottoEvent @event)
         {
-            var redis = RedisHelper.GetDatabase();
+            var redis = _redisHelper.GetDatabase();
             redis.HashDecrement(string.Format(KEY_USER_INFO_FMT, @event.LoveMotto.UID),
                 F_S_LOVED_MOTTOS);
 
@@ -105,7 +111,7 @@ namespace iMotto.Cache.RedisImpl
 
         public void HandleEvent(CreateVoteEvent @event)
         {
-            var redis = RedisHelper.GetDatabase();
+            var redis = _redisHelper.GetDatabase();
 
             redis.HashIncrement(string.Format(KEY_USER_INFO_FMT, @event.UID),
                 F_S_VOTES);
@@ -127,7 +133,7 @@ namespace iMotto.Cache.RedisImpl
 
         public void HandleEvent(CreateMottoEvent @event)
         {
-            var redis = RedisHelper.GetDatabase();
+            var redis = _redisHelper.GetDatabase();
 
             redis.HashIncrement(string.Format(KEY_USER_INFO_FMT, @event.Motto.UID),
                 F_S_MOTTOS);
@@ -139,7 +145,7 @@ namespace iMotto.Cache.RedisImpl
 
         public void HandleEvent(CreateCollectionEvent @event)
         {
-            var redis = RedisHelper.GetDatabase();
+            var redis = _redisHelper.GetDatabase();
             redis.HashIncrement(string.Format(KEY_USER_INFO_FMT, @event.Collection.UID),
                 F_S_COLLECTIONS);
 
@@ -149,14 +155,14 @@ namespace iMotto.Cache.RedisImpl
 
         public void HandleEvent(LoadUserInfoEvent @event)
         {
-            RedisHelper.HashSet(string.Format(KEY_USER_INFO_FMT, @event.UserInfo.Id),
+            _redisHelper.HashSet(string.Format(KEY_USER_INFO_FMT, @event.UserInfo.Id),
                 ConvertToHashEntries(@event.UserInfo),
                 TimeSpan.FromDays(7));
         }
 
         public void HandleEvent(LoveCollectionEvent @event)
         {
-            var redis = RedisHelper.GetDatabase();
+            var redis = _redisHelper.GetDatabase();
 
             redis.HashIncrement(string.Format(KEY_USER_INFO_FMT, @event.LoveCollection.UID),
                 F_S_LOVED_COLLECTIONS);
@@ -167,7 +173,7 @@ namespace iMotto.Cache.RedisImpl
 
         public void HandleEvent(UnLoveCollectionEvent @event)
         {
-            var redis = RedisHelper.GetDatabase();
+            var redis = _redisHelper.GetDatabase();
             redis.HashDecrement(string.Format(KEY_USER_INFO_FMT, @event.LoveCollection.UID),
                 F_S_LOVED_COLLECTIONS);
 
@@ -177,21 +183,21 @@ namespace iMotto.Cache.RedisImpl
 
         public void HandleEvent(CollectMottoEvent @event)
         {
-            var redis = RedisHelper.GetDatabase();
+            var redis = _redisHelper.GetDatabase();
             redis.SetAdd(string.Format(KEY_USER_ALL_COLLECTED_MOTTOS_FMT, @event.UID),
                 @event.CollectionMotto.MID.ToString());
         }
 
         public void HandleEvent(UnCollectMottoEvent @event)
         {
-            var redis = RedisHelper.GetDatabase();
+            var redis = _redisHelper.GetDatabase();
             redis.SetRemove(string.Format(KEY_USER_ALL_COLLECTED_MOTTOS_FMT, @event.UID),
                 @event.CollectionMotto.MID.ToString());
         }
 
         public void HandleEvent(LoveUserEvent @event)
         {
-            var redis = RedisHelper.GetDatabase();
+            var redis = _redisHelper.GetDatabase();
             var batch = redis.CreateBatch();
 
             var tasks = new Task[] {
@@ -215,7 +221,7 @@ namespace iMotto.Cache.RedisImpl
 
         public void HandleEvent(UnLoveUserEvent @event)
         {
-            var redis = RedisHelper.GetDatabase();
+            var redis = _redisHelper.GetDatabase();
             var batch = redis.CreateBatch();
 
             var tasks = new Task[] {
@@ -231,7 +237,7 @@ namespace iMotto.Cache.RedisImpl
 
         public void HandleEvent(BanUserEvent @event)
         {
-            var redis = RedisHelper.GetDatabase();
+            var redis = _redisHelper.GetDatabase();
             var batch = redis.CreateBatch();
 
             var tasks = new Task[] {
@@ -245,7 +251,7 @@ namespace iMotto.Cache.RedisImpl
 
         public void HandleEvent(UnBanUserEvent @event)
         {
-            var redis = RedisHelper.GetDatabase();
+            var redis = _redisHelper.GetDatabase();
             var batch = redis.CreateBatch();
             var tasks = new Task[] {
                 batch.SetRemoveAsync(string.Format(KEY_USER_ALL_BAN_USERS_FMT, @event.SUID), @event.TUID),
@@ -313,7 +319,7 @@ namespace iMotto.Cache.RedisImpl
 
         public List<long> GetUserCollectionIds(string uid, int pIndex, int pSize)
         {
-            var redis = RedisHelper.GetDatabase();
+            var redis = _redisHelper.GetDatabase();
             var cids = redis.ListRange(string.Format(KEY_USER_ALL_COLLECTIONS_FMT, uid), (pIndex - 1) * pSize, pIndex * pSize - 1);
 
             return cids.Select(d => (long)d).ToList();
@@ -321,7 +327,7 @@ namespace iMotto.Cache.RedisImpl
 
         public async Task<List<long>> GetCollectedMottoIds(string uid, IEnumerable<long> mids)
         {
-            var redis = RedisHelper.GetDatabase();
+            var redis = _redisHelper.GetDatabase();
             var batch = redis.CreateBatch();
 
             var tasks = new List<Task>();
@@ -350,7 +356,7 @@ namespace iMotto.Cache.RedisImpl
 
         public async Task<List<long>> GetLovedMottoIds(string uid, IEnumerable<long> mids)
         {
-            var redis = RedisHelper.GetDatabase();
+            var redis = _redisHelper.GetDatabase();
             var batch = redis.CreateBatch();
             var tasks = new List<Task>();
             var loved = new List<long>();
@@ -380,7 +386,7 @@ namespace iMotto.Cache.RedisImpl
         public async Task<Dictionary<long, int>> GetVotedStates(string uid, IEnumerable<long> mids)
         {
             Dictionary<long, int> result = new Dictionary<long, int>();
-            var redis = RedisHelper.GetDatabase();
+            var redis = _redisHelper.GetDatabase();
             
             var batch = redis.CreateBatch();
             var tasks = new List<Task>();
@@ -413,25 +419,25 @@ namespace iMotto.Cache.RedisImpl
         public bool HasLovedMotto(string uid, long mid)
         {
             var key = string.Format(KEY_USER_ALL_LOVED_MOTTOS_FMT, uid);
-            return RedisHelper.SetContains(key, mid.ToString());
+            return _redisHelper.SetContains(key, mid.ToString());
         }
 
         public bool HasReviewed(string uid, long mid)
         {
             var key = string.Format(KEY_USER_ALL_REVIEW_MOTTOS_FMT, uid);
-            return RedisHelper.SetContains(key, mid.ToString());
+            return _redisHelper.SetContains(key, mid.ToString());
         }
 
         public bool HasCollectedMotto(string uid, long mid)
         {
             var key = string.Format(KEY_USER_ALL_COLLECTED_MOTTOS_FMT, uid);
-            return RedisHelper.SetContains(key, mid.ToString());
+            return _redisHelper.SetContains(key, mid.ToString());
         }
 
         //返回投票状态 NotYet = 9, Supported = 1, Opposed = -1， Middle = 0
         public int HasVoted(string uid, long mid)
         {
-            var redis = RedisHelper.GetDatabase();
+            var redis = _redisHelper.GetDatabase();
             var val = redis.HashGet(string.Format(KEY_USER_ALL_VOTE_FMT, uid), mid.ToString());
 
             if (val.HasValue) {
@@ -443,7 +449,7 @@ namespace iMotto.Cache.RedisImpl
 
         public async Task<List<long>> GetReviewedMottoIds(string uid, IEnumerable<long> mids)
         {
-            var redis = RedisHelper.GetDatabase();
+            var redis = _redisHelper.GetDatabase();
             var result = new List<long>();
             var key = string.Format(KEY_USER_ALL_REVIEW_MOTTOS_FMT, uid);
 
@@ -482,7 +488,7 @@ namespace iMotto.Cache.RedisImpl
 
         public async Task<List<long>> GetLovedCollectionIds(string uid, IEnumerable<long> cids)
         {
-            var redis = RedisHelper.GetDatabase();
+            var redis = _redisHelper.GetDatabase();
             var result = new List<long>();
 
             if (cids.Count() > 1)
@@ -524,7 +530,7 @@ namespace iMotto.Cache.RedisImpl
 
         //public async Task<Tuple<long?, long?>> GetUserRank(string uid, int theday, int yesterday)
         //{
-        //    var redis = RedisHelper.GetDatabase();
+        //    var redis = _redisHelper.GetDatabase();
         //    var batch = redis.CreateBatch();
         //    var rankTask = batch.SortedSetRankAsync(string.Format(KEY_USER_RANK_FMT, theday), uid, Order.Descending);
         //    var lastRankTask = batch.SortedSetRankAsync(string.Format(KEY_USER_RANK_FMT, yesterday), uid, Order.Descending);
@@ -539,7 +545,7 @@ namespace iMotto.Cache.RedisImpl
 
         //public List<UserScore> GetUserRange(int theday, int yesterday, int start, int stop)
         //{
-        //    var redis = RedisHelper.GetDatabase();
+        //    var redis = _redisHelper.GetDatabase();
         //    var key = string.Format(KEY_USER_RANK_FMT, theday);
         //    List<UserScore> result = null;
 
@@ -572,7 +578,7 @@ namespace iMotto.Cache.RedisImpl
 
         //public async Task TryFillUserInfo(List<UserScore> users)
         //{
-        //    var redis = RedisHelper.GetDatabase();
+        //    var redis = _redisHelper.GetDatabase();
 
         //    var tasks = new List<Task>();
         //    var batch = redis.CreateBatch();
@@ -602,7 +608,7 @@ namespace iMotto.Cache.RedisImpl
 
         public async Task<UserRelation> GetRelation(string userId, string targetUId)
         {
-            var redis = RedisHelper.GetDatabase();
+            var redis = _redisHelper.GetDatabase();
             var batch = redis.CreateBatch();
             var result = new UserRelation();
             var tasks = new List<Task>();
@@ -630,7 +636,7 @@ namespace iMotto.Cache.RedisImpl
 
         public async Task<Dictionary<string, UserRelation>> GetRelations(string suid, IEnumerable<string> tuids)
         {
-            var redis = RedisHelper.GetDatabase();
+            var redis = _redisHelper.GetDatabase();
             var batch = redis.CreateBatch();
             var results = new Dictionary<string, UserRelation>();
             var tasks = new List<Task>();
@@ -666,7 +672,7 @@ namespace iMotto.Cache.RedisImpl
         public async Task<Dictionary<string, bool>> HasBans(string suid, IEnumerable<string> tuids)
         {
             var results = new Dictionary<string, bool>();
-            var redis = RedisHelper.GetDatabase();
+            var redis = _redisHelper.GetDatabase();
             var batch = redis.CreateBatch();
             var tasks = new List<Task>();
 
@@ -687,7 +693,7 @@ namespace iMotto.Cache.RedisImpl
         public async Task<Dictionary<string, bool>> IsFollowers(string suid, IEnumerable<string> tuids)
         {
             var results = new Dictionary<string, bool>();
-            var redis = RedisHelper.GetDatabase();
+            var redis = _redisHelper.GetDatabase();
             var batch = redis.CreateBatch();
             var tasks = new List<Task>();
             foreach (var tuid in tuids)
@@ -707,7 +713,7 @@ namespace iMotto.Cache.RedisImpl
 
         public void HandleEvent(UpdateUserNameEvent @event)
         {
-            var redis = RedisHelper.GetDatabase();
+            var redis = _redisHelper.GetDatabase();
 
             var entries = new HashEntry[] 
             {
@@ -722,7 +728,7 @@ namespace iMotto.Cache.RedisImpl
 
         public void HandleEvent(UpdateUserThumbEvent @event)
         {
-            var redis = RedisHelper.GetDatabase();
+            var redis = _redisHelper.GetDatabase();
 
             redis.HashSet(string.Format(KEY_USER_INFO_FMT, @event.UID),
                 F_THUMB, @event.Thumb);
@@ -730,7 +736,7 @@ namespace iMotto.Cache.RedisImpl
 
         public void HandleEvent(UpdateSexEvent @event)
         {
-            var redis = RedisHelper.GetDatabase();
+            var redis = _redisHelper.GetDatabase();
 
             redis.HashSet(string.Format(KEY_USER_INFO_FMT, @event.UID),
                 F_SEX, @event.Sex.ToString());
@@ -747,7 +753,7 @@ namespace iMotto.Cache.RedisImpl
                 Extras = new Dictionary<string, string> { { "TYPE", "1" }, { "UID", @event.SUID } }
             });
             
-            RedisHelper.GetDatabase().Publish(CHANNEL_GENERAL_MSG, notice);
+            _redisHelper.GetDatabase().Publish(CHANNEL_GENERAL_MSG, notice);
         }
     }
 }

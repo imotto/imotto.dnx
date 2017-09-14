@@ -1,4 +1,5 @@
 ﻿using iMotto.Cache;
+using iMotto.Cache.RedisImpl;
 using iMotto.Data;
 using iMotto.Data.Dapper;
 using iMotto.Events;
@@ -34,6 +35,7 @@ namespace iMotto.Api
         {
             services.TryAddSingleton<IEventPublisher, DefaultEventPublisher>();
             services.TryAddSingleton<ICacheManager, CacheManager>();
+            services.TryAddSingleton<RedisHelper>();
         }
 
         public static void UseCache(this IApplicationBuilder app)

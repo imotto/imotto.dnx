@@ -1,7 +1,6 @@
-﻿using System;
+﻿using iMotto.Data.Entities.Models;
 using iMotto.Events;
-using iMotto.Data.Entities;
-using iMotto.Data.Entities.Models;
+using System;
 
 namespace iMotto.Cache.RedisImpl
 {
@@ -10,26 +9,32 @@ namespace iMotto.Cache.RedisImpl
         private const string KEY_DEV_FMT = "DEV{0}";
         private const string KEY_AWARD_NOTICE = "AWDN{0}";
         private const string KEY_AWARDEE_NOTICE = "ADEN{0}";
+        private readonly RedisHelper _redisHelper;
+
+        public DeviceSignatureCache(RedisHelper redisHelper)
+        {
+            _redisHelper = redisHelper;
+        }
 
         public void HandleEvent(DeviceRegEvent @event)
         {
-            RedisHelper.StringSet(string.Format(KEY_DEV_FMT, @event.Signature), DateTime.Now.ToString("yyyyMMddHHmmss"),
+            _redisHelper.StringSet(string.Format(KEY_DEV_FMT, @event.Signature), DateTime.Now.ToString("yyyyMMddHHmmss"),
                 TimeSpan.FromDays(31));
         }
 
         public bool IsDeviceActive(string sign)
         {
-            var result = RedisHelper.StringGet(string.Format(KEY_DEV_FMT, sign));
+            var result = _redisHelper.StringGet(string.Format(KEY_DEV_FMT, sign));
             return !string.IsNullOrWhiteSpace(result);
         }
 
         public DisplayNotice ShouldDisplayNotice(string sign, int theMonth)
         {
-            var redis = RedisHelper.GetDatabase();
+            var redis = _redisHelper.GetDatabase();
             string awardeeKey = string.Format(KEY_AWARDEE_NOTICE, theMonth);
             if (redis.KeyExists(awardeeKey))
             {
-                if (!RedisHelper.SetContains(awardeeKey, sign))
+                if (!_redisHelper.SetContains(awardeeKey, sign))
                 {
                     return DisplayNotice.Awardee;
                 }
@@ -39,7 +44,7 @@ namespace iMotto.Cache.RedisImpl
 
             if (redis.KeyExists(awardKey))
             {
-                if (!RedisHelper.SetContains(awardKey, sign))
+                if (!_redisHelper.SetContains(awardKey, sign))
                 {
                     return DisplayNotice.Award;
                 }
@@ -50,7 +55,7 @@ namespace iMotto.Cache.RedisImpl
 
         public void HandleEvent(DisplayNoticeEvent @event)
         {
-            var redis = RedisHelper.GetDatabase();
+            var redis = _redisHelper.GetDatabase();
             switch (@event.DisplayNotice)
             {
                 case DisplayNotice.Award:

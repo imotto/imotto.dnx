@@ -78,6 +78,16 @@ namespace iMotto.Common.Settings
             };
         }
 
+        public ICacheSetting GetCacheSetting()
+        {
+            var redisConnStr = GetSetting(SettingKeys.RedisConnStrKey).GetAwaiter().GetResult();
+
+            return new CacheSetting
+            {
+                RedisConnStr = redisConnStr
+            };
+        }
+
         //get service method not implemented
     }
 }

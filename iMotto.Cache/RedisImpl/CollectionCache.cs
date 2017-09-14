@@ -12,11 +12,16 @@ namespace iMotto.Cache.RedisImpl
         private const string KEY_COLLECTION_FMT = "COL{0}";
         private const string KEY_COLLECTION_RANK = "COLRANK";
         private const string KEY_COLLECTION_MOTTO_FMT = "CMS{0}";
+        private readonly RedisHelper _redisHelper;
 
+        public CollectionCache(RedisHelper redisHelper)
+        {
+            _redisHelper = redisHelper;
+        }
 
         public async Task<List<long>> WhichHasContainsMID(long mid, IEnumerable<long> cids)
         {
-            var redis = RedisHelper.GetDatabase();
+            var redis = _redisHelper.GetDatabase();
 
             var batch = redis.CreateBatch();
 
@@ -44,13 +49,13 @@ namespace iMotto.Cache.RedisImpl
 
         public void HandleEvent(UnLoveCollectionEvent @event)
         {
-            RedisHelper.HashDecrement(string.Format(KEY_COLLECTION_FMT,
+            _redisHelper.HashDecrement(string.Format(KEY_COLLECTION_FMT,
                 @event.LoveCollection.CID), F_LOVES);
         }
 
         public void HandleEvent(UnCollectMottoEvent @event)
         {
-            var redis = RedisHelper.GetDatabase();
+            var redis = _redisHelper.GetDatabase();
 
             redis.HashDecrement(string.Format(KEY_COLLECTION_FMT,
                 @event.CollectionMotto.CID.ToString()), F_MOTTOS);
@@ -61,7 +66,7 @@ namespace iMotto.Cache.RedisImpl
 
         public void HandleEvent(CollectMottoEvent @event)
         {
-            var redis = RedisHelper.GetDatabase();
+            var redis = _redisHelper.GetDatabase();
 
             redis.HashIncrement(string.Format(KEY_COLLECTION_FMT,
                 @event.CollectionMotto.CID.ToString()), F_MOTTOS);
@@ -72,13 +77,13 @@ namespace iMotto.Cache.RedisImpl
 
         public void HandleEvent(LoveCollectionEvent @event)
         {
-            RedisHelper.HashIncrement(string.Format(KEY_COLLECTION_FMT,
+            _redisHelper.HashIncrement(string.Format(KEY_COLLECTION_FMT,
                 @event.LoveCollection.CID.ToString()), F_LOVES);
         }
 
         public void HandleEvent(CreateCollectionEvent @event)
         {
-            var redis = RedisHelper.GetDatabase();
+            var redis = _redisHelper.GetDatabase();
             var collection = @event.Collection;
             var key = string.Format(KEY_COLLECTION_FMT, collection.ID);
             var entries = ConvertToEntries(collection);

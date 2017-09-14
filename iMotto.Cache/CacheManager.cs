@@ -9,11 +9,13 @@ namespace iMotto.Cache
     {
         private bool _inited = false;
         private readonly IEventPublisher _eventPublisher;
+        private readonly RedisHelper _redisHelper;
         private readonly Dictionary<Type, object> Caches = new Dictionary<Type, object>();
         
-        public CacheManager(IEventPublisher eventPublisher)
+        public CacheManager(IEventPublisher eventPublisher, RedisHelper redisHelper)
         {
             _eventPublisher = eventPublisher;
+            _redisHelper = redisHelper;
         }
 
         public void Initialize()
@@ -25,13 +27,13 @@ namespace iMotto.Cache
 
             _inited = true;
 
-            IOnlineUserCache onlineUserCache = new OnlineUserCache();
-            IEvaluatingMottoCache evaluatingMottoCache = new EvaluatingMottoCache();
-            IVerifyCodeCache verifyCodeCache = new VerifyCodeCache();
-            IDeviceSignatureCache deviceSignCache = new DeviceSignatureCache();
-            IUserInfoCache userInfoCache = new UserInfoCache();
-            ICollectionCache collectionCache = new CollectionCache();
-            ISyncRootCache syncRootCache = new SyncRootCache();
+            IOnlineUserCache onlineUserCache = new OnlineUserCache(_redisHelper);
+            IEvaluatingMottoCache evaluatingMottoCache = new EvaluatingMottoCache(_redisHelper);
+            IVerifyCodeCache verifyCodeCache = new VerifyCodeCache(_redisHelper);
+            IDeviceSignatureCache deviceSignCache = new DeviceSignatureCache(_redisHelper);
+            IUserInfoCache userInfoCache = new UserInfoCache(_redisHelper);
+            ICollectionCache collectionCache = new CollectionCache(_redisHelper);
+            ISyncRootCache syncRootCache = new SyncRootCache(_redisHelper);
 
 
             Caches.Add(typeof(IEvaluatingMottoCache), evaluatingMottoCache);
