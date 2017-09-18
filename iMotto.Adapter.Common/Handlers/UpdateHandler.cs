@@ -23,7 +23,6 @@ namespace iMotto.Adapter.Common
             {
                 return new UpdateResult
                 {
-                    Code = reqObj.Code,
                     State = HandleStates.Success,
                     Msg = "已是最新版本.",
                     CurVer = reqObj.Version.ToString(),
@@ -34,7 +33,6 @@ namespace iMotto.Adapter.Common
 
             return new UpdateResult
             {
-                Code = reqObj.Code,
                 State = HandleStates.Success,
                 Msg = string.Empty,
                 CurVer = update.DisplayVersion,

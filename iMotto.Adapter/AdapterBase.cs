@@ -18,7 +18,6 @@ namespace iMotto.Adapter
         {
             return Task.FromResult(new HandleResult
             {
-                Code = reqObj.Code,
                 State = HandleStates.InvalidData,
                 Msg = "UNKNOWN HANDLER"
             });

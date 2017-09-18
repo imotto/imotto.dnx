@@ -16,7 +16,6 @@ namespace iMotto.Adapter.Common
         {
             return Task.FromResult(new HandleResult
             {
-                Code = reqObj.Code,
                 State = HandleStates.Success,
                 Msg = string.Empty
             });

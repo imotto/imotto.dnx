@@ -14,9 +14,9 @@ namespace iMotto.Data
 
         ////Task<PrepareExchangeResult> PrepareExchange(string userId, int giftId);
 
-        //Task<ExchangeResult> DoExchangeAsync(string userId, int giftId, long reqInfoId, int amount);
-        //Task<int> ReceiveGiftAsync(string userId, long exchangeId);
-        //Task<int> ReviewGiftAsync(string userId, int giftId, long exchangeId, double rate, string comment);
+        Task<ExchangeResult> DoExchangeAsync(string userId, int giftId, long reqInfoId, int amount);
+        Task<int> ReceiveGiftAsync(string userId, long exchangeId);
+        Task<int> ReviewGiftAsync(string userId, int giftId, long exchangeId, double rate, string comment);
 
         Task<List<Award>> GetAwardsAsync(string uid, int pIndex, int pSize);
         Task<int> ReceiveAwardAsync(string userId, int awardId);

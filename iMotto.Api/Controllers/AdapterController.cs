@@ -33,7 +33,6 @@ namespace iMotto.Api.Controllers
                 {
                     return new HandleResult
                     {
-                        Code = code,
                         State = HandleStates.InvalidData,
                         Msg = "Input error."
                     };

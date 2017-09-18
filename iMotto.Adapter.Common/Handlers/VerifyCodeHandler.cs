@@ -36,7 +36,6 @@ namespace iMotto.Adapter.Common
             {
                 return new VerifyCodeResult
                 {
-                    Code = reqObj.Code,
                     State = HandleStates.InvalidData,
                     Msg = "手机号码输入有误"
                 };
@@ -50,7 +49,6 @@ namespace iMotto.Adapter.Common
                 {
                     return new VerifyCodeResult
                     {
-                        Code = reqObj.Code,
                         State = HandleStates.DuplicatedPhone,
                         Msg = "此手机号码已被注册"
                     };
@@ -77,7 +75,6 @@ namespace iMotto.Adapter.Common
 
                     return new VerifyCodeResult
                     {
-                        Code = reqObj.Code,
                         State = HandleStates.Success,
                         Msg = string.Empty,
                         Content = t.Code //should remove.
@@ -87,7 +84,6 @@ namespace iMotto.Adapter.Common
                 {
                     return new VerifyCodeResult
                     {
-                        Code = reqObj.Code,
                         State = HandleStates.UnkownError,
                         Msg = "发送验证码时出了点问题，请稍后重试"
                     };
@@ -103,7 +99,6 @@ namespace iMotto.Adapter.Common
                 {
                     return new VerifyCodeResult
                     {
-                        Code = reqObj.Code,
                         State = HandleStates.UserNotExists,
                         Msg = "此手机号码尚未注册"
                     };
@@ -131,7 +126,6 @@ namespace iMotto.Adapter.Common
 
                     return new VerifyCodeResult
                     {
-                        Code = reqObj.Code,
                         State = HandleStates.Success,
                         Msg = string.Empty,
                         Content = string.Empty
@@ -141,7 +135,6 @@ namespace iMotto.Adapter.Common
                 {
                     return new VerifyCodeResult
                     {
-                        Code = reqObj.Code,
                         State = HandleStates.UnkownError,
                         Msg = "发送验证码时出了点问题，请稍后重试"
                     };
@@ -151,7 +144,6 @@ namespace iMotto.Adapter.Common
 
             return new VerifyCodeResult
             {
-                Code = reqObj.Code,
                 State = HandleStates.InvalidData,
                 Msg = "请求数据输入有误"
             };

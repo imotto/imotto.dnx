@@ -127,10 +127,11 @@ namespace iMotto.Data.Dapper
 
         public async Task<User> GetByPhoneNumberAsync(string phoneNumber)
         {
+            await Task.Delay(0);
             User user = null;
             using (var conn = _connProvider.GetConnection())
             {
-                using (var reader = await conn.ExecuteReaderAsync(@"select u.Id,u.UserName,u.DisplayName,u.Thumb,t.Mottos,t.Collections,t.Reviews,t.Votes,t.Followers,t.Follows,
+                using (var reader = conn.ExecuteReader(@"select u.Id,u.UserName,u.DisplayName,u.Thumb,t.Mottos,t.Collections,t.Reviews,t.Votes,t.Followers,t.Follows,
                 t.LovedMottos,t.LovedCollections,t.Balance,t.Revenue,t.Recruits,t.Reviews,t.Bans,u.PasswordHash,u.Sex 
                 from Users u,UserStatistics t where u.ID=t.UID and PhoneNumber=@Phone",
                    new

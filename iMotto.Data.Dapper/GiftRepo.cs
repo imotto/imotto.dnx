@@ -162,5 +162,20 @@ namespace iMotto.Data.Dapper
 
             return spot;
         }
+
+        public Task<ExchangeResult> DoExchangeAsync(string userId, int giftId, long reqInfoId, int amount)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> ReceiveGiftAsync(string userId, long exchangeId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> ReviewGiftAsync(string userId, int giftId, long exchangeId, double rate, string comment)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

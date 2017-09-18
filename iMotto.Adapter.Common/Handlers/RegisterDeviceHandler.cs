@@ -43,7 +43,6 @@ namespace iMotto.Adapter.Common
             {
                 await Task.Delay(0);
                 return new HandleResult {
-                    Code = reqObj.Code,
                     State = HandleStates.InvalidData,
                     Msg = "请求数据有误"
                 };
@@ -82,7 +81,6 @@ namespace iMotto.Adapter.Common
                 
 
                 var result = new RegisterDeviceResult {
-                    Code = reqObj.Code,
                     State = HandleStates.Success,
                     Msg = string.Empty,
                     Sign = info.DeviceSig
@@ -161,7 +159,6 @@ namespace iMotto.Adapter.Common
 
                 return new RegisterDeviceResult
                 {
-                    Code = reqObj.Code,
                     State = HandleStates.UnkownError,
                     Msg = ex.Message,
                     Sign = info.DeviceSig

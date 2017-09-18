@@ -7,6 +7,8 @@ namespace iMotto.Adapter
     {
         protected bool NeedSign { get; set; }
 
+        protected bool NeedVerifyUser { get; set; }
+
         public Type ReqType => typeof(T);
 
         public HandleRequest ObtainModel()

@@ -2,8 +2,6 @@
 {
     public class HandleResult
     {
-        public string Code { get; set; }
-
         public int State { get; set; }
 
         public string Msg { get; set; }

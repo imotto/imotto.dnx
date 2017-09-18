@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\iMotto.Adapter.Common\iMotto.Adapter.Common.csproj" />
+    <ProjectReference Include="..\iMotto.Adapter.Users\iMotto.Adapter.Users.csproj" />
     <ProjectReference Include="..\iMotto.Adapter\iMotto.Adapter.csproj" />
     <ProjectReference Include="..\iMotto.Data.Dapper\iMotto.Data.Dapper.csproj" />
   </ItemGroup>
