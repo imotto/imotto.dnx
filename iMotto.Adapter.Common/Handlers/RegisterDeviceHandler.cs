@@ -57,7 +57,7 @@ namespace iMotto.Adapter.Common
                 CurrentVersion = reqObj.Version,
                 DevIdenNo = reqObj.UniqueId,
                 DeviceSig = devSig,
-                DeviceType = reqObj.Type,
+                DeviceType = reqObj.Type??string.Empty,
                 Model = reqObj.Model,
                 OprSystem = reqObj.OS,
                 ResolutionRatio = reqObj.Resolution,

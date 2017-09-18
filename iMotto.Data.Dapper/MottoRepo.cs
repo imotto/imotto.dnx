@@ -21,8 +21,7 @@ namespace iMotto.Data.Dapper
         public async Task<int> AddMottoAsync(Motto m)
         {
             int rowAffected = 0;
-            
-            
+                        
             using (var conn = _connProvider.GetConnection())
             {
                 var tran = conn.BeginTransaction();

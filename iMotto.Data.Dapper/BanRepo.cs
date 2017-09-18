@@ -24,11 +24,11 @@ namespace iMotto.Data.Dapper
 
                 try
                 {
-                    await conn.ExecuteAsync("insert into T_Ban(SUID,TUID,BanTime) values (@SUID,@TUID,@BanTime)", ban, tran);
+                    await conn.ExecuteAsync("insert into Bans(SUID,TUID,BanTime) values (@SUID,@TUID,@BanTime)", ban, tran);
 
                     if (removeFollow)
                     {
-                        await conn.ExecuteAsync("delete T_Follow where SUID=@SUID and TUID=@TUID",
+                        await conn.ExecuteAsync("delete Follows where SUID=@SUID and TUID=@TUID",
                             new
                             {
                                 SUID = ban.SUID,
@@ -38,7 +38,7 @@ namespace iMotto.Data.Dapper
 
                     if (resetMutual)
                     {
-                        await conn.ExecuteAsync("update T_Follow set IsMutual=@IsMutual where SUID=@suid and TUID= @tuid",
+                        await conn.ExecuteAsync("update Follows set IsMutual=@IsMutual where SUID=@suid and TUID= @tuid",
                             new
                             {
                                 IsMutual = 0,
@@ -47,7 +47,7 @@ namespace iMotto.Data.Dapper
                             }, tran);
                     }
 
-                    await conn.ExecuteAsync("update T_UserStatistics set Bans=Bans+1, Follows=Follows-@ReduceFollow where UID=@UID", new
+                    await conn.ExecuteAsync("update UserStatistics set Bans=Bans+1, Follows=Follows-@ReduceFollow where UID=@UID", new
                     {
                         ReduceFollow = removeFollow ? 1 : 0,
                         UID = ban.SUID
@@ -55,7 +55,7 @@ namespace iMotto.Data.Dapper
                  
                     if (removeFollow)
                     {
-                        await conn.ExecuteAsync("update T_UserStatistics set Followers=Followers-1 where UID=@uid", new
+                        await conn.ExecuteAsync("update UserStatistics set Followers=Followers-1 where UID=@uid", new
                         {
                             UID = ban.TUID
                         }, tran);
@@ -84,8 +84,8 @@ namespace iMotto.Data.Dapper
                 var tran = conn.BeginTransaction();
                 try
                 {
-                    await conn.ExecuteAsync("delete from T_Ban where SUID=@SUID and TUID=@TUID", ban, tran);
-                    await conn.ExecuteAsync("update T_UserStatistics set Bans=Bans-1 where UID=@uid", new { UID = ban.SUID }, tran);
+                    await conn.ExecuteAsync("delete from Bans where SUID=@SUID and TUID=@TUID", ban, tran);
+                    await conn.ExecuteAsync("update UserStatistics set Bans=Bans-1 where UID=@uid", new { UID = ban.SUID }, tran);
                     tran.Commit();
                 }
                 catch

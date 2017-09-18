@@ -43,14 +43,14 @@ namespace iMotto.Data.Dapper
 
                     //if (rowAffected > 0)
                     //{
-                    var sql = @"Insert into T_Users (Id,Email,EmailConfirmed,PasswordHash,SecurityStamp,PhoneNumber,PhoneNumberConfirmed,
+                    var sql = @"Insert into Users (Id,Email,EmailConfirmed,PasswordHash,SecurityStamp,PhoneNumber,PhoneNumberConfirmed,
                         TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName,DisplayName,thumb) 
                         Values(@Id,@Email,@EmailConfirmed,@PasswordHash,@SecurityStamp,@PhoneNumber,@PhoneNumberConfirmed,
                         @TwoFactorAuthEnabled,@LockoutEndDate,@LockoutEnabled,@AccessFailedCount,@UserName,@DisplayName,@thumb)";
 
                     rowAffected = await conn.ExecuteAsync(sql, user, tran);
 
-                    await conn.ExecuteAsync(@"Insert into T_UserStatistics (UID) Values (@Uid)",
+                    await conn.ExecuteAsync(@"Insert into UserStatistics (UID) Values (@Uid)",
                         new
                         {
                             UID = user.Id
@@ -83,7 +83,7 @@ namespace iMotto.Data.Dapper
             throw new NotImplementedException();
             //using (var conn = _connProvider.GetConnection())
             //{
-            //    return await conn.ExecuteAsync("Delete from T_Users where Id=@ID",
+            //    return await conn.ExecuteAsync("Delete from Users where Id=@ID",
             //        new
             //        {
             //            ID=user.Id
@@ -96,7 +96,7 @@ namespace iMotto.Data.Dapper
             throw new NotImplementedException();
             //IdentityUser user = null;
             //using (var reader = await ExecuteReaderAsync(ConnStr, @"Select Id,Email,EmailConfirmed,PasswordHash,SecurityStamp,PhoneNumber,PhoneNumberConfirmed,
-            //        TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName from T_Users
+            //        TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName from Users
             //        where Id=@id", new SqlParameter("@id", uid)))
             //{
             //    if (reader.Read())
@@ -113,7 +113,7 @@ namespace iMotto.Data.Dapper
             throw new NotImplementedException();
             //IdentityUser user = null;
             //using (var reader = await ExecuteReaderAsync(ConnStr, @"Select Id,Email,EmailConfirmed,PasswordHash,SecurityStamp,PhoneNumber,PhoneNumberConfirmed,
-            //        TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName from T_Users
+            //        TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName from Users
             //        where UserName=@uName", new SqlParameter("@uName", userName)))
             //{
             //    if (reader.Read())
@@ -155,7 +155,7 @@ namespace iMotto.Data.Dapper
             throw new NotImplementedException();
             //IdentityUser user = null;
             //using (var reader = await ExecuteReaderAsync(ConnStr, @"Select Id,Email,EmailConfirmed,PasswordHash,SecurityStamp,PhoneNumber,PhoneNumberConfirmed,
-            //        TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName from T_Users
+            //        TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName from Users
             //        where Email=@email", new SqlParameter("@email", email)))
             //{
             //    if (reader.Read())
@@ -170,7 +170,7 @@ namespace iMotto.Data.Dapper
         public async Task<int> UpdateAsync(IdentityUser user)
         {
             throw new NotImplementedException();
-            //return await ExecuteNonQueryAsync(ConnStr, @"Update T_Users SET Email=@Email,EmailConfirmed=@EmailConfirmed,PasswordHash=@PasswordHash,SecurityStamp=@SecurityStamp,PhoneNumber=@PhoneNumber,
+            //return await ExecuteNonQueryAsync(ConnStr, @"Update Users SET Email=@Email,EmailConfirmed=@EmailConfirmed,PasswordHash=@PasswordHash,SecurityStamp=@SecurityStamp,PhoneNumber=@PhoneNumber,
             //        PhoneNumberConfirmed=@PhoneNumberConfirmed,TwoFactorEnabled=@TwoFactorAuthEnabled,LockoutEndDateUtc=@LockoutEndDate,LockoutEnabled=@LockoutEnabled,
             //        AccessFailedCount=@AccessFailedCount,UserName=@UserName WHERE Id=@Id",
             //    new SqlParameter("@Email", user.Email),
@@ -191,7 +191,7 @@ namespace iMotto.Data.Dapper
         {
             using (var conn = _connProvider.GetConnection())
             {
-                return await conn.ExecuteAsync("update T_Users set PasswordHash=@NewPass where Id=@Id and PasswordHash=@OldPass",
+                return await conn.ExecuteAsync("update Users set PasswordHash=@NewPass where Id=@Id and PasswordHash=@OldPass",
                     new
                     {
                         NewPass = nHashPassword,
@@ -219,7 +219,7 @@ namespace iMotto.Data.Dapper
         {
             using (var conn = _connProvider.GetConnection())
             {
-                return await conn.ExecuteAsync("update T_Users set DisplayName=@UserName,UserName=@UserName where Id=@Id",
+                return await conn.ExecuteAsync("update Users set DisplayName=@UserName,UserName=@UserName where Id=@Id",
                     new
                     {
                         Id = userId,
@@ -232,7 +232,7 @@ namespace iMotto.Data.Dapper
         {
             using (var conn = _connProvider.GetConnection())
             {
-                return await conn.ExecuteAsync("update T_Users set Thumb=@Thumb where Id=@Id",
+                return await conn.ExecuteAsync("update Users set Thumb=@Thumb where Id=@Id",
                     new
                     {
                         Thumb = thumb,
@@ -245,7 +245,7 @@ namespace iMotto.Data.Dapper
         {
             using (var conn = _connProvider.GetConnection())
             {
-                return await conn.ExecuteAsync("update T_Users set Sex=@Sex where Id=@Id",
+                return await conn.ExecuteAsync("update Users set Sex=@Sex where Id=@Id",
                     new
                     {
                         Sex = sex,
@@ -259,7 +259,7 @@ namespace iMotto.Data.Dapper
             throw new NotImplementedException();
             //var sql = @"select u.ID,u.UserName,u.DisplayName,u.Thumb,t.Mottos,t.Collections,t.Reviews,t.Votes,t.Followers,t.Follows,
             //    t.LovedMottos,t.LovedCollections,t.Balance,t.Revenue,t.Recruits,t.Reviews,t.Bans 
-            //    from T_Users u,T_UserStatistics t where u.ID=t.UID and u.Id in({0})";
+            //    from Users u,UserStatistics t where u.ID=t.UID and u.Id in({0})";
 
             //var result = new List<User>();
 
@@ -280,7 +280,7 @@ namespace iMotto.Data.Dapper
         {
             var sql = @"select u.ID,u.UserName,u.DisplayName,u.Thumb,t.Mottos,t.Collections,t.Reviews,t.Votes,t.Followers,t.Follows,
                 t.LovedMottos,t.LovedCollections,t.Balance,t.Revenue,t.Recruits,t.Reviews,t.Bans,u.Sex
-                from T_Users u,T_UserStatistics t where u.ID=t.UID and u.Id=@uid";
+                from Users u,UserStatistics t where u.ID=t.UID and u.Id=@uid";
 
             User user = null;
             using (var conn = _connProvider.GetConnection())
@@ -331,12 +331,12 @@ namespace iMotto.Data.Dapper
 
             //string sql = @"select t.id,t.UserName,t.DisplayName,t.Thumb,t.Sex, CAST(1 as bit) as IsMutual,t.BanTime,ts.Mottos,ts.Revenue,ts.Follows,ts.Followers from (
             //    select tu.id, tu.UserName, tu.DisplayName, tu.Thumb, tu.Sex,tf.BanTime, ROW_NUMBER() over(order by tf.BanTime desc) as rn
-            //     from T_Ban tf, T_Users tu where tf.TUID = tu.Id and tf.SUID = @UID) t, T_UserStatistics ts where t.Id = ts.UID and t.rn between @start and @end";
+            //     from Bans tf, T_Users tu where tf.TUID = tu.Id and tf.SUID = @UID) t, UserStatistics ts where t.Id = ts.UID and t.rn between @start and @end";
             using (var conn = _connProvider.GetConnection())
             {
                 var sql = @"select t.id,t.UserName,t.DisplayName,t.Thumb,t.Sex, CAST(1 as bit) as IsMutual,t.BanTime,ts.Mottos,ts.Revenue,ts.Follows,ts.Followers from (
-                    select tu.id, tu.UserName, tu.DisplayName, tu.Thumb, tu.Sex,tf.BanTime from T_Ban tf, T_Users tu where tf.TUID = tu.Id and tf.SUID = @UID) t,
-                    T_UserStatistics ts where t.Id = ts.UID limit @Skip,@Take";
+                    select tu.id, tu.UserName, tu.DisplayName, tu.Thumb, tu.Sex,tf.BanTime from Bans tf, Users tu where tf.TUID = tu.Id and tf.SUID = @UID) t,
+                    Userstatistics ts where t.Id = ts.UID limit @Skip,@Take";
 
                 using (var reader = await conn.ExecuteReaderAsync(sql, new
                 {
@@ -729,7 +729,7 @@ namespace iMotto.Data.Dapper
         {
             using (var conn = _connProvider.GetConnection())
             {
-                var sql = @"select u.ID as UID, T.Revenue as Score, u.DisplayName as UserName,u.Thumb as UserThumb, u.Sex from T_Users u, T_UserStatistics t 
+                var sql = @"select u.ID as UID, T.Revenue as Score, u.DisplayName as UserName,u.Thumb as UserThumb, u.Sex from Users u, UserStatistics t 
                         where T.UID = U.ID order by t.Revenue desc limit 0,100";
                 var tmp = await conn.QueryAsync<UserRank>(sql);
 

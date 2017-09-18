@@ -34,7 +34,7 @@ namespace iMotto.Data.Dapper
                     {
                         t.ID = id;
 
-                        await conn.ExecuteAsync("update T_UserStatistics set Collections=Collections+1 where UID=@uid",
+                        await conn.ExecuteAsync("update UserStatistics set Collections=Collections+1 where UID=@uid",
                             new
                             {
                                 UID = t.UID
@@ -79,7 +79,7 @@ namespace iMotto.Data.Dapper
 
                     if (rowAffected > 0)
                     {
-                        await conn.ExecuteAsync("update T_UserStatistics set LovedCollections=LovedCollections+1 where UID=@uid",
+                        await conn.ExecuteAsync("update UserStatistics set LovedCollections=LovedCollections+1 where UID=@uid",
                             new
                             {
                                 UID = lt.UID
@@ -127,7 +127,7 @@ namespace iMotto.Data.Dapper
 
                     if (rowAffected > 0)
                     {
-                        await conn.ExecuteAsync("update T_UserStatistics set LovedCollections=LovedCollections-1 where UID=@UID",
+                        await conn.ExecuteAsync("update UserStatistics set LovedCollections=LovedCollections-1 where UID=@UID",
                             new {
                                 UID = lt.UID
                             }, tran);

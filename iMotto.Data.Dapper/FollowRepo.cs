@@ -24,24 +24,24 @@ namespace iMotto.Data.Dapper
                 var tran = conn.BeginTransaction();
                 try
                 {
-                    rowaffected = await conn.ExecuteAsync("insert into T_Follow(SUID,TUID,IsMutual,FollowTime) values (@SUID,@TUID,@IsMutual,@FollowTime)", follow, tran);                    
+                    rowaffected = await conn.ExecuteAsync("insert into Follows(SUID,TUID,IsMutual,FollowTime) values (@SUID,@TUID,@IsMutual,@FollowTime)", follow, tran);                    
                     
                     if (follow.IsMutual)
                     {
-                        await conn.ExecuteAsync("update T_Follow set IsMutual=1 where SUID=@SUID and TUID= @TUID",
+                        await conn.ExecuteAsync("update Follows set IsMutual=1 where SUID=@SUID and TUID= @TUID",
                             new { SUID = follow.TUID, TUID = follow.SUID }, tran);
                     }
 
                     if (removeBan)
                     {
-                        await conn.ExecuteAsync("delete T_Ban where SUID=@SUID and TUID=@TUID",
+                        await conn.ExecuteAsync("delete Bans where SUID=@SUID and TUID=@TUID",
                             new { SUID = follow.SUID, TUID = follow.TUID }, tran);
                     }
                     
-                    await conn.ExecuteAsync("update T_UserStatistics set Follows=Follows+1, Bans=Bans-@Ban where UID=@UID",
+                    await conn.ExecuteAsync("update UserStatistics set Follows=Follows+1, Bans=Bans-@Ban where UID=@UID",
                         new { Ban = removeBan ? 1 : 0, UID = follow.SUID }, tran);
                     
-                    await conn.ExecuteAsync("update T_UserStatistics set Followers=Followers+1 where UID=@uid", 
+                    await conn.ExecuteAsync("update UserStatistics set Followers=Followers+1 where UID=@uid", 
                         new { UID = follow.TUID }, tran);                  
 
                     await conn.ExecuteAsync(@"insert into T_Notice(UID,Title,Content,Type,State,TargetID, TargetInfo,CreateTime)
@@ -84,12 +84,12 @@ namespace iMotto.Data.Dapper
                 var tran = conn.BeginTransaction();
                 try
                 {
-                    rowAffected = await conn.ExecuteAsync("delete from T_Follow where SUID=@SUID and TUID=@TUID",
+                    rowAffected = await conn.ExecuteAsync("delete from Follows where SUID=@SUID and TUID=@TUID",
                         follow, tran);
 
                     if (follow.IsMutual)
                     {
-                        await conn.ExecuteAsync("update T_Follow set IsMutual=0 where SUID=@SUID and TUID= @TUID",
+                        await conn.ExecuteAsync("update Follows set IsMutual=0 where SUID=@SUID and TUID= @TUID",
                             new
                             {
                                 SUID = follow.TUID,
@@ -97,10 +97,10 @@ namespace iMotto.Data.Dapper
                             }, tran);                        
                     }
 
-                    await conn.ExecuteAsync("update T_UserStatistics set Follows=Follows-1 where UID=@UID",
+                    await conn.ExecuteAsync("update UserStatistics set Follows=Follows-1 where UID=@UID",
                         new { UID = follow.SUID }, tran);
 
-                    await conn.ExecuteAsync("update T_UserStatistics set Followers=Followers-1 where UID=@UID",
+                    await conn.ExecuteAsync("update UserStatistics set Followers=Followers-1 where UID=@UID",
                         new { UID = follow.TUID }, tran);                   
 
                     tran.Commit();

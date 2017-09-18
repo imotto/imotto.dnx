@@ -99,11 +99,11 @@ namespace iMotto.Data.Dapper
         public async Task<SpotLight> GetAwardSpotlightAsync(int theMonth)
         {
             SpotLight spotlight = null;
-            string sql = "select ID, Name, Img, Status, Amount from T_Award where ID=@awardId";
+            string sql = "select ID, Name, Img, Status, Amount from Awards where ID=@awardId";
 
             using (var conn =_connProvider.GetConnection())
             {
-                var tmp = await conn.QueryFirstOrDefaultAsync<dynamic>("select ID, Name, Img, Status, Amount from T_Award where ID=@awardId",
+                var tmp = await conn.QueryFirstOrDefaultAsync<dynamic>("select ID, Name, Img, Status, Amount from Awards where ID=@awardId",
                     new {
                         AwardId = theMonth
                     });
@@ -141,7 +141,7 @@ namespace iMotto.Data.Dapper
             using (var conn = _connProvider.GetConnection())
             {
 
-                var tmp = await conn.QueryAsync<string>(@"select tb.DisplayName from Awardees ta,T_Users tb
+                var tmp = await conn.QueryAsync<string>(@"select tb.DisplayName from Awardees ta,Users tb
                         where ta.UID = tb.id and ta.AwardId=@AwardId order by ta.Rank",
                         new
                         {

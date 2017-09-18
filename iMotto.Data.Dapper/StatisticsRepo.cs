@@ -29,7 +29,7 @@ namespace iMotto.Data.Dapper
         {
             throw new NotImplementedException();
             //var result = new List<StatisticsViaUser>();
-            //var sql = "select UID,Mottos,Recruits,Collections,Reviews,Votes,LovedMottos,LovedTreasures,Revenue,Balance,Follows,Followers,Bans from T_UserStatistics where UID in ({0})";
+            //var sql = "select UID,Mottos,Recruits,Collections,Reviews,Votes,LovedMottos,LovedTreasures,Revenue,Balance,Follows,Followers,Bans from UserStatistics where UID in ({0})";
             //var parameters = Helper.BuildDynamicParameters<string>(ref sql, userIds);
                        
 
