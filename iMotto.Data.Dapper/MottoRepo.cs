@@ -452,10 +452,7 @@ namespace iMotto.Data.Dapper
 
         public async Task<List<Motto>> GetMottosByDayAsync(DateTime theDay, int pIndex, int pSize)
         {
-            var result = new List<Motto>();
-            var sql = @"select ID,Score,UID,Up,Down,Reviews,Loves,RecruitID,RecruitTitle,Content,AddTime,rnk
-                 from (select *, ROW_NUMBER() over(order by score desc) as rnk from T_Motto where AddTime>=@begin and AddTime<@end) t
-                 where rnk between @startIndex and @endIndex";
+            var result = new List<Motto>();            
 
             using (var conn = _connProvider.GetConnection())
             {

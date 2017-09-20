@@ -279,7 +279,7 @@ namespace iMotto.Data.Dapper
             }            
         }
 
-        public async Task<List<Collection>> GetCollectionsByTagAsync(string tag, int pIndex, int pSize)
+        public Task<List<Collection>> GetCollectionsByTagAsync(string tag, int pIndex, int pSize)
         {
             throw new NotImplementedException();
             //var result = new List<Collection>(pSize);
@@ -300,7 +300,7 @@ namespace iMotto.Data.Dapper
             //return result;
         }
 
-        public async Task<List<Tag>> GetTagsAsync(int pIndex, int pSize)
+        public Task<List<Tag>> GetTagsAsync(int pIndex, int pSize)
         {
             throw new NotImplementedException();
             //var result = new List<Tag>(pSize);

@@ -14,6 +14,7 @@ using iMotto.Common.Settings;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using iMotto.Adapter.Users;
 using iMotto.Adapter.Mottos;
+using iMotto.Adapter.Readers;
 
 namespace iMotto.Api
 {
@@ -39,6 +40,7 @@ namespace iMotto.Api
             services.AddCommonAdapter();
             services.AddUserAdapter();
             services.AddMottoAdapter();
+            services.AddReadAdapter();
 
             services.AddMvc();
         }
@@ -55,6 +57,7 @@ namespace iMotto.Api
             app.UseCommonAdapter();
             app.UseUserAdapter();
             app.UseMottoAdapter();
+            app.UseReadAdapter();
 
             app.UseMvc(routes => {
                 routes.MapRoute(

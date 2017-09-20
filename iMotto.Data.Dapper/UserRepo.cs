@@ -78,7 +78,7 @@ namespace iMotto.Data.Dapper
             return rowAffected;
         }
 
-        public async Task<int> DeleteAsync(IdentityUser user)
+        public Task<int> DeleteAsync(IdentityUser user)
         {
             throw new NotImplementedException();
             //using (var conn = _connProvider.GetConnection())
@@ -91,7 +91,7 @@ namespace iMotto.Data.Dapper
             //}
         }
 
-        public async Task<IdentityUser> GetByIdAsync(string uid)
+        public Task<IdentityUser> GetByIdAsync(string uid)
         {
             throw new NotImplementedException();
             //IdentityUser user = null;
@@ -108,7 +108,7 @@ namespace iMotto.Data.Dapper
             //return user;
         }
 
-        public async Task<IdentityUser> GetByNameAsync(string userName)
+        public Task<IdentityUser> GetByNameAsync(string userName)
         {
             throw new NotImplementedException();
             //IdentityUser user = null;
@@ -151,7 +151,7 @@ namespace iMotto.Data.Dapper
             return user;
         }
 
-        public async Task<IdentityUser> GetByEmailAsync(string email)
+        public Task<IdentityUser> GetByEmailAsync(string email)
         {
             throw new NotImplementedException();
             //IdentityUser user = null;
@@ -168,7 +168,7 @@ namespace iMotto.Data.Dapper
             //return user;
         }
 
-        public async Task<int> UpdateAsync(IdentityUser user)
+        public Task<int> UpdateAsync(IdentityUser user)
         {
             throw new NotImplementedException();
             //return await ExecuteNonQueryAsync(ConnStr, @"Update Users SET Email=@Email,EmailConfirmed=@EmailConfirmed,PasswordHash=@PasswordHash,SecurityStamp=@SecurityStamp,PhoneNumber=@PhoneNumber,
@@ -255,7 +255,7 @@ namespace iMotto.Data.Dapper
             }
         }
 
-        public async Task<List<User>> GetUsersAsync(List<string> userIds)
+        public Task<List<User>> GetUsersAsync(List<string> userIds)
         {
             throw new NotImplementedException();
             //var sql = @"select u.ID,u.UserName,u.DisplayName,u.Thumb,t.Mottos,t.Collections,t.Reviews,t.Votes,t.Followers,t.Follows,
@@ -584,7 +584,7 @@ namespace iMotto.Data.Dapper
             }
         }
 
-        public async Task<List<RelAccount>> GetUserRelAccountsAsync(string userId, int type = 0)
+        public Task<List<RelAccount>> GetUserRelAccountsAsync(string userId, int type = 0)
         {
             throw new NotImplementedException();
             //var result = new List<RelAccount>();
@@ -629,7 +629,7 @@ namespace iMotto.Data.Dapper
             //return result;
         }
 
-        public async Task<List<UserAddress>> BatchGetUserAddressesAsync(IEnumerable<long> ids)
+        public Task<List<UserAddress>> BatchGetUserAddressesAsync(IEnumerable<long> ids)
         {
             throw new NotImplementedException();
             //List<string> pnames = new List<string>();
@@ -677,7 +677,7 @@ namespace iMotto.Data.Dapper
             //return result;
         }
 
-        public async Task<List<RelAccount>> BatchGetUserRelAccountsAsync(IEnumerable<long> ids)
+        public Task<List<RelAccount>> BatchGetUserRelAccountsAsync(IEnumerable<long> ids)
         {
             throw new NotImplementedException();
 

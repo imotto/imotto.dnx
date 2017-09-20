@@ -9,7 +9,7 @@ namespace iMotto.Data.Dapper
 {
     class RecruitRepo:RepoBase, IRecruitRepo
     {
-        public async Task<int> AddRecruitApplyAsync(Entities.RecruitA ra)
+        public Task<int> AddRecruitApplyAsync(Entities.RecruitA ra)
         {
             throw new NotImplementedException();
 
@@ -22,7 +22,7 @@ namespace iMotto.Data.Dapper
             //    new SqlParameter("@description", ra.Description));
         }
 
-        public async Task<int> RemoveRecruitApplyAsync(Entities.RecruitA ra)
+        public Task<int> RemoveRecruitApplyAsync(Entities.RecruitA ra)
         {
             throw new NotImplementedException();
             //return await ExecuteNonQueryAsync(ConnStr,
@@ -30,7 +30,7 @@ namespace iMotto.Data.Dapper
             //new SqlParameter("@id", ra.ID));
         }
 
-        public async Task<int> AddRecruitAsync(Entities.Recruit r)
+        public Task<int> AddRecruitAsync(Entities.Recruit r)
         {
             throw new NotImplementedException();
             //return await ExecuteNonQueryAsync(ConnStr,
@@ -42,7 +42,7 @@ namespace iMotto.Data.Dapper
             //    new SqlParameter("@description", r.Description));
         }
 
-        public async Task<int> AddRecruitWinnerAsync(Entities.RecruitWinner rw)
+        public Task<int> AddRecruitWinnerAsync(Entities.RecruitWinner rw)
         {
             throw new NotImplementedException();
             //return await ExecuteNonQueryAsync(ConnStr,
@@ -59,7 +59,7 @@ namespace iMotto.Data.Dapper
             //    new SqlParameter("@remark", rw.Remark));
         }
 
-        public async Task<List<Recruit>> GetRecruitsAsync(int start, int end)
+        public Task<List<Recruit>> GetRecruitsAsync(int start, int end)
         {
             throw new NotImplementedException();
             //var result = new List<Recruit>();
@@ -79,7 +79,7 @@ namespace iMotto.Data.Dapper
 
         }
 
-        public async Task<List<Recruit>> GetRecruitsByUserAsync(string userId, int pIndex, int pSize)
+        public Task<List<Recruit>> GetRecruitsByUserAsync(string userId, int pIndex, int pSize)
         {
             throw new NotImplementedException();
             //var result = new List<Recruit>();

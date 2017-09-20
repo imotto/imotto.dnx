@@ -25,7 +25,7 @@ namespace iMotto.Data.Dapper
             }
         }
 
-        public async Task<List<StatisticsViaUser>> GetUserStatistics(List<string> userIds)
+        public Task<List<StatisticsViaUser>> GetUserStatistics(List<string> userIds)
         {
             throw new NotImplementedException();
             //var result = new List<StatisticsViaUser>();

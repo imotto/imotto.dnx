@@ -103,7 +103,7 @@ namespace iMotto.Data.Dapper
 
             using (var conn =_connProvider.GetConnection())
             {
-                var tmp = await conn.QueryFirstOrDefaultAsync<dynamic>("select ID, Name, Img, Status, Amount from Awards where ID=@awardId",
+                var tmp = await conn.QueryFirstOrDefaultAsync<dynamic>(sql,
                     new {
                         AwardId = theMonth
                     });
@@ -174,6 +174,31 @@ namespace iMotto.Data.Dapper
         }
 
         public Task<int> ReviewGiftAsync(string userId, int giftId, long exchangeId, double rate, string comment)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<Gift>> GetGiftsAsync(int pIndex, int pSize)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<GiftExchange>> GetGiftExchangesAsync(int giftId, int pIndex, int pSize, int status = -1)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<GiftExchange>> GetUserExchangesAsync(string userId, int pIndex, int pSize)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<Gift>> GetGiftsByVendorAsync(string userId, int status, int pIndex, int pSize)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<DeliverResult> DeliverGiftAsync(string userId, int giftId, long exchangeId, string exCode)
         {
             throw new NotImplementedException();
         }

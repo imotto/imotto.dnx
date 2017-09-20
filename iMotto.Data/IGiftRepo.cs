@@ -6,11 +6,11 @@ namespace iMotto.Data
 {
     public interface IGiftRepo:IRepository
     {
-        //Task<List<Gift>> GetGiftsAsync(int pIndex, int pSize);
-        //Task<List<GiftExchange>> GetGiftExchangesAsync(int giftId, int pIndex, int pSize, int status = -1);
-        //Task<List<GiftExchange>> GetUserExchangesAsync(string userId, int pIndex, int pSize);
-        //Task<List<Gift>> GetGiftsByVendorAsync(string userId, int status, int pIndex, int pSize);
-        //Task<DeliverResult> DeliverGiftAsync(string userId, int giftId, long exchangeId, string exCode);
+        Task<List<Gift>> GetGiftsAsync(int pIndex, int pSize);
+        Task<List<GiftExchange>> GetGiftExchangesAsync(int giftId, int pIndex, int pSize, int status = -1);
+        Task<List<GiftExchange>> GetUserExchangesAsync(string userId, int pIndex, int pSize);
+        Task<List<Gift>> GetGiftsByVendorAsync(string userId, int status, int pIndex, int pSize);
+        Task<DeliverResult> DeliverGiftAsync(string userId, int giftId, long exchangeId, string exCode);
 
         ////Task<PrepareExchangeResult> PrepareExchange(string userId, int giftId);
 
