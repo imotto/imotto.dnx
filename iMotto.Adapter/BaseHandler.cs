@@ -9,6 +9,8 @@ namespace iMotto.Adapter
 
         protected bool NeedVerifyUser { get; set; }
 
+        protected string NeedRole { get; set; }
+
         public Type ReqType => typeof(T);
 
         public HandleRequest ObtainModel()
@@ -16,7 +18,7 @@ namespace iMotto.Adapter
             return new T();
         }
 
-        public Task<HandleResult> Handle(HandleRequest model)
+        public async Task<HandleResult> Handle(HandleRequest model)
         {
             var request = model as T;
 
@@ -27,70 +29,68 @@ namespace iMotto.Adapter
 
             if (NeedSign)
             {
-                //if (!SignatureStore.PrepareSignature(t.Sign))
-                //{
-                //    return new HandleResult
-                //    {
-                //        Code = Code,
-                //        Msg = "非法请求来源.",
-                //        State = HandleStates.InvalidSource
-                //    };
-                //}
+                if (!SignatureStore.PrepareSignature(request.Sign))
+                {
+                    await Task.Delay(5000);
+                    return new HandleResult
+                    {
+                        Msg = "非法请求来源.",
+                        State = HandleStates.InvalidSource
+                    };
+                }
             }
 
-//            if (needVerifyUser)
-//            {
-//                var authedReq = t as AuthedRequest;
+            if (NeedVerifyUser)
+            {
+                var authedReq = model as AuthedRequest;
 
-//                if (authedReq == null)
-//                {
-//                    return new HandleResult
-//                    {
-//                        Code = Code,
-//                        State = HandleStates.InvalidData,
-//#if DEBUG
-//                        Msg = "Handler无法处理的请求。"
-//#else
-//                                    Msg= "服务器一脸蒙逼，请重新登录再试吧"
-//#endif
-//                    };
-//                    //throw new Exception("请求的操作与请求的类型不匹配");
-//                }
+                if (authedReq == null)
+                {
+                    await Task.Delay(5000);
+                    return new HandleResult
+                    {
+                        State = HandleStates.InvalidData,
+#if DEBUG
+                        Msg = "Handler无法处理的请求。"
+#else
+                        Msg= "服务器一脸蒙逼，请重新登录再试吧"
+#endif
+                    };
+                    //throw new Exception("请求的操作与请求的类型不匹配");
+                }
 
-//                signature = authedReq.Sign;
+                var signature = authedReq.Sign;
 
-//                if (!SignatureStore.VerifyUserToken(authedReq.Token, authedReq.UserId, signature))
-//                {
-//                    return new HandleResult
-//                    {
-//                        Code = Code,
-//#if DEBUG
-//                        Msg = "Handler无法处理的请求。",
-//#else
-//                                    Msg= "好像出了点问题，请重新登录再试吧",
-//#endif
-//                        State = HandleStates.NotLoginYet
-//                    };
-//                }
+                if (!SignatureStore.VerifyUserToken(authedReq.Token, authedReq.UserId, signature))
+                {
+                    await Task.Delay(5000);
+                    return new HandleResult
+                    {
+#if DEBUG
+                        Msg = "Handler无法处理的请求。",
+#else
+                          Msg= "好像出了点问题，请重新登录再试吧",
+#endif
+                        State = HandleStates.NotLoginYet
+                    };
+                }
 
-//                if (!string.IsNullOrEmpty(needRole))
-//                {
-//                    //验证用户是具有指定角色
-//                    if (!RoleStateStore.AssertUserHasRole(authedReq.UserId, needRole))
-//                    {
-//                        return new HandleResult
-//                        {
-//                            Code = Code,
-//                            Msg = "用户不具有相关角色权限",
-//                            State = HandleStates.InvalidRole
-//                        };
-//                    }
-//                }
-//            }
+                if (!string.IsNullOrEmpty(NeedRole))
+                {
+                    //验证用户是具有指定角色
+                    if (!SignatureStore.AssertUserHasRole(authedReq.UserId, NeedRole))
+                    {
+                        await Task.Delay(5000);
+                        return new HandleResult
+                        {
+                            Msg = "用户不具有相关角色权限",
+                            State = HandleStates.InvalidRole
+                        };
+                    }
+                }
+            }
 
-
-
-            return HandleCoreAsync(request);
+            return await HandleCoreAsync(request);
         }
 
         protected abstract Task<HandleResult> HandleCoreAsync(T request);

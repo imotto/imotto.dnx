@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using iMotto.Cache;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 
 namespace iMotto.Adapter
@@ -13,6 +16,13 @@ namespace iMotto.Adapter
         public static void AddAdapter(this IServiceCollection services)
         {
             services.AddSingleton<AdapterFactory>();
+        }
+
+        public static void UseSignatureStore(this IApplicationBuilder app)
+        {
+            SignatureStore.CacheManager = app.ApplicationServices.GetService<ICacheManager>();
+            SignatureStore.Logger = app.ApplicationServices.GetService<ILoggerFactory>()
+                                        .CreateLogger("SignatureStore");
         }
     }
 }
