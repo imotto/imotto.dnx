@@ -6,6 +6,7 @@ using iMotto.Adapter.Users;
 using iMotto.Api.Diagnostic;
 using iMotto.Common.Settings;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
@@ -30,6 +31,9 @@ namespace iMotto.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDataProtection()
+                .DisableAutomaticKeyGeneration();
+
             services.AddOptions();
             services.Configure<ConsulSetting>(Configuration.GetSection("Consul"));
             services.TryAddSingleton<ISettingProvider, SettingProvider>();
