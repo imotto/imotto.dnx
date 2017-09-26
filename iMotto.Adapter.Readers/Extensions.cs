@@ -10,6 +10,7 @@ namespace iMotto.Adapter.Readers
     {
         public static void AddReadAdapter(this IServiceCollection serviceCollection)
         {
+            serviceCollection.AddSingleton<ModelBuilder>();
             serviceCollection.AddSingleton<ReadersAdapter>();
             serviceCollection.AddSingleton<ReadAddressesHandler>();
             serviceCollection.AddSingleton<ReadAwardeeHandler>();
