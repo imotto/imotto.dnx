@@ -769,7 +769,7 @@ namespace iMotto.Data.Dapper
 
             using (var conn = _connProvider.GetConnection())
             {
-                var sql = "select sum(Msgs) from T_RecentTalk where UID=@UID";
+                var sql = "select sum(Msgs) from RecentTalks where UID=@UID";
 
                 var result = await conn.QueryFirstOrDefaultAsync<int>(sql,
                     new
@@ -779,7 +779,7 @@ namespace iMotto.Data.Dapper
 
                 total += result;
 
-                sql = "select count(*) from T_Notice where UID=@uid and state = 0";
+                sql = "select count(*) from Notices where UID=@uid and state = 0";
                 var result2 = await conn.QueryFirstOrDefaultAsync<int>(sql,
                     new
                     {

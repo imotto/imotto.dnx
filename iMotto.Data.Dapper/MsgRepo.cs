@@ -41,7 +41,7 @@ namespace iMotto.Data.Dapper
         {
             using (var conn = _connProvider.GetConnection())
             {
-                return await conn.ExecuteAsync("update T_Notice set State=1 where ID=@NID and UID=@UID",
+                return await conn.ExecuteAsync("update Notices set State=1 where ID=@NID and UID=@UID",
                     new {
                         NID = id,
                         UID = userId
@@ -54,7 +54,7 @@ namespace iMotto.Data.Dapper
             using (var conn = _connProvider.GetConnection())
             {
                 var tmp = await conn.QueryAsync<RecentTalk>(@"select WithUID,Content,Direction,LastTime,Msgs 
-                    from T_RecentTalk where UID=@UID limit @Skip, @Take",
+                    from RecentTalks where UID=@UID limit @Skip, @Take",
                     new
                     {
                         UID = uid,
@@ -76,16 +76,16 @@ namespace iMotto.Data.Dapper
             {
                 needReverse = true;
                 clearUnRead = true;
-                sql = $"select ID,Content,Direction,SendTime from T_Talk where uid=@UID and WithUID=@WithUID order by id desc limit 0,{Math.Abs(take)}";
+                sql = $"select ID,Content,Direction,SendTime from Talks where uid=@UID and WithUID=@WithUID order by id desc limit 0,{Math.Abs(take)}";
             }
             else if (take < 0)
             {
                 needReverse = true;
-                sql = $"select ID,Content,Direction,SendTime from T_Talk where ID<{start} and uid=@UID and WithUID=@WithUID order by id desc limit 0,{Math.Abs(take)}";
+                sql = $"select ID,Content,Direction,SendTime from Talks where ID<{start} and uid=@UID and WithUID=@WithUID order by id desc limit 0,{Math.Abs(take)}";
             }
             else if (take > 0)
             {
-                sql = $"select ID,Content,Direction,SendTime from T_Talk where ID>{start} and uid=@UID and WithUID=@WithUID order by id asc limit 0,{take}";
+                sql = $"select ID,Content,Direction,SendTime from Talks where ID>{start} and uid=@UID and WithUID=@WithUID order by id asc limit 0,{take}";
                 clearUnRead = true;
             }
             else
@@ -108,7 +108,7 @@ namespace iMotto.Data.Dapper
 
                 if (clearUnRead)
                 {
-                    await conn.ExecuteAsync(@"update T_RecentTalk set Msgs = 0 where UID=@UID and WithUID=@WithUID", param);
+                    await conn.ExecuteAsync(@"update RecentTalks set Msgs = 0 where UID=@UID and WithUID=@WithUID", param);
                 }
 
                 var result = tmp.AsList();

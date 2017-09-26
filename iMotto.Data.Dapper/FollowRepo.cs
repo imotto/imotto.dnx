@@ -44,7 +44,7 @@ namespace iMotto.Data.Dapper
                     await conn.ExecuteAsync("update UserStatistics set Followers=Followers+1 where UID=@uid", 
                         new { UID = follow.TUID }, tran);                  
 
-                    await conn.ExecuteAsync(@"insert into T_Notice(UID,Title,Content,Type,State,TargetID, TargetInfo,CreateTime)
+                    await conn.ExecuteAsync(@"insert into Notices(UID,Title,Content,Type,State,TargetID, TargetInfo,CreateTime)
 	                    values(@UID,@Title, @Content, @Type, @State,@TargetId,@TargetInfo,@CreateTime)",
                         new
                         {

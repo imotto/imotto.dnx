@@ -361,7 +361,7 @@ namespace iMotto.Data.Dapper
         {
             using (var conn = _connProvider.GetConnection())
             {
-                var tmp = await conn.QueryAsync<Collection>(@"select ID, Score, UID, Title, Description, Mottos, Loves, CreateTime, Tags 
+                var tmp = await conn.QueryAsync<Collection>(@"select ID, Score, lc.UID, Title, Description, Mottos, Loves, CreateTime, Tags 
                     from LoveCollections lc, Collections c where lc.CID =c.ID and lc.UID=@UID
                     order by lc.LoveTime desc limit @Skip,@Take",
                     new
