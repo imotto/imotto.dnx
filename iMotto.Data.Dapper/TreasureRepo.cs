@@ -74,7 +74,7 @@ namespace iMotto.Data.Dapper
 
                 try
                 {
-                    rowAffected = await conn.ExecuteAsync("insert into T_LoveCollection (UID,LoveTime,CID) values (@UID,@LoveTime,@CID)",
+                    rowAffected = await conn.ExecuteAsync("insert into LoveCollections (UID,LoveTime,CID) values (@UID,@LoveTime,@CID)",
                         lt, tran);
 
                     if (rowAffected > 0)
@@ -122,7 +122,7 @@ namespace iMotto.Data.Dapper
                 var tran = conn.BeginTransaction();
                 try
                 {
-                    rowAffected = await conn.ExecuteAsync("delete from T_LoveCollection where UID=@UID and CID=@CID",
+                    rowAffected = await conn.ExecuteAsync("delete from LoveCollections where UID=@UID and CID=@CID",
                         lt, tran);
 
                     if (rowAffected > 0)
@@ -259,7 +259,7 @@ namespace iMotto.Data.Dapper
         {
             using (var conn = _connProvider.GetConnection())
             {
-                return await conn.ExecuteAsync("insert into T_Tag(Name,Collections) values(@Name,@Collections)", t);
+                return await conn.ExecuteAsync("insert into Tags(Name,Collections) values(@Name,@Collections)", t);
             }
         }
 

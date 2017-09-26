@@ -25,7 +25,7 @@ namespace iMotto.Data.Dapper
         {
             using (var conn = _connProvider.GetConnection())
             {
-                return await conn.ExecuteAsync(@"update T_Report set Status=@Status,ProcessUID=@ProcessUID,Result=@Result,ProcessTime=@ProcessTime
+                return await conn.ExecuteAsync(@"update Reports set Status=@Status,ProcessUID=@ProcessUID,Result=@Result,ProcessTime=@ProcessTime
                     where ID=@ID", r);
             }
         }

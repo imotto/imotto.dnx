@@ -537,10 +537,10 @@ namespace iMotto.Data.Dapper
                 var tran = conn.BeginTransaction();
                 try
                 {
-                    await conn.ExecuteAsync(@"update T_UserAddresses set IsDefault=0 where UID=@UserId and IsDefault=1",
+                    await conn.ExecuteAsync(@"update UserAddresses set IsDefault=0 where UID=@UserId and IsDefault=1",
                         new { UserId = userId }, tran);
 
-                    var rowAffected = await conn.ExecuteAsync("update T_UserAddresses set IsDefault=1 where UID=@UserId and ID=@Aid",
+                    var rowAffected = await conn.ExecuteAsync("update UserAddresses set IsDefault=1 where UID=@UserId and ID=@Aid",
                         new
                         {
                             UserId = userId,
@@ -649,7 +649,7 @@ namespace iMotto.Data.Dapper
             //    await conn.OpenAsync();
             //    var cmd = conn.CreateCommand();
             //    cmd.CommandText = @"select [ID],[UID],[Province],[City],[District],[Address],[Zip],[Contact],[Mobile],[IsDefault] 
-            //        from T_UserAddresses where ID in("+ string.Join(",", pnames) +")";
+            //        from UserAddresses where ID in("+ string.Join(",", pnames) +")";
 
             //    cmd.Parameters.AddRange(parameters.ToArray());
 

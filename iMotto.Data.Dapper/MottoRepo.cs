@@ -27,7 +27,7 @@ namespace iMotto.Data.Dapper
                 var tran = conn.BeginTransaction();
                 try
                 {
-                    var id = await conn.QueryFirstOrDefaultAsync<long>("insert into T_Motto(UID,TheDay, Score, Content,RecruitID,RecruitTitle,AddTime) " +
+                    var id = await conn.QueryFirstOrDefaultAsync<long>("insert into Mottos(UID,TheDay, Score, Content,RecruitID,RecruitTitle,AddTime) " +
                         "values(@UID,@TheDay,@Score,@Content,@RID,@RTitle,@AddTime); select @@IDENTITY;", new {
                         UID = m.UID,
                         TheDay = Utils.GetTheDay(m.AddTime),
@@ -302,14 +302,14 @@ namespace iMotto.Data.Dapper
                     }
                     else
                     {                        
-                        rowAffected = await conn.ExecuteAsync("delete T_ReviewVote where MID=@MID and ReviewID=@ReviewID and UID=@UID", rv, tran);
+                        rowAffected = await conn.ExecuteAsync("delete ReviewVotes where MID=@MID and ReviewID=@ReviewID and UID=@UID", rv, tran);
                     }
 
                     if (rowAffected > 0)
                     {                       
                         if (rv.Support == 1)
                         {
-                            await conn.ExecuteAsync("update T_Review set Up=Up+1 where MID=@mid and ID=@reviewId",
+                            await conn.ExecuteAsync("update Reviews set Up=Up+1 where MID=@mid and ID=@reviewId",
                                 new
                                 {
                                     MID = rv.MID,
@@ -318,7 +318,7 @@ namespace iMotto.Data.Dapper
                         }
                         else
                         {
-                            await conn.ExecuteAsync("update T_Review set Up=Up-1 where MID=@mid and ID=@reviewId",
+                            await conn.ExecuteAsync("update Reviews set Up=Up-1 where MID=@mid and ID=@reviewId",
                                 new
                                 {
                                     MID = rv.MID,
@@ -367,7 +367,7 @@ namespace iMotto.Data.Dapper
                     {
                         await conn.ExecuteAsync("update UserStatistics set Votes=Votes+1 where UID=@UID", new { UID = v.UID }, tran);
 
-                        await conn.ExecuteAsync("update T_Motto set Up=Up+@Up,Down=Down+@Down where ID=@MID", 
+                        await conn.ExecuteAsync("update Mottos set Up=Up+@Up,Down=Down+@Down where ID=@MID", 
                             new {
                                 Up= v.Support,
                                 Down = v.Oppose,
@@ -403,7 +403,7 @@ namespace iMotto.Data.Dapper
 
             using (var conn = _connProvider.GetConnection())
             {
-                var sql = "select ID,Score,UID,Up,Down,Reviews,Loves,RecruitID,RecruitTitle,Content,AddTime from T_Motto where ID>=@Start and ID<=@End";
+                var sql = "select ID,Score,UID,Up,Down,Reviews,Loves,RecruitID,RecruitTitle,Content,AddTime from Mottos where ID>=@Start and ID<=@End";
                 var tmp = conn.Query<Motto>(sql, new
                 {
                     Start = start,
