@@ -51,7 +51,12 @@ namespace iMotto.Api
             services.AddMottoAdapter();
             services.AddReadAdapter();
 
-            services.AddMvc();
+            services.AddMvc().AddJsonOptions(options =>
+            {
+                options.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver(); 
+                options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

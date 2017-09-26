@@ -44,7 +44,8 @@ namespace iMotto.Api.Controllers
             else
             {
                 var model = handler.ObtainModel();
-                await TryUpdateModelAsync(model, string.Empty);
+                
+                await TryUpdateModelAsync(model, model.GetType(), string.Empty);
                 return await handler.Handle(model);
             }
 

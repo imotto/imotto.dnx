@@ -50,7 +50,7 @@ namespace iMotto.Data.Dapper
                     {
                         if (int.TryParse(info.TerminalVersion, out var vcode))
                         {
-                            uinfo = conn.QueryFirstOrDefault<UpdateInfo>(@"select VersionName as DisplayVersion,Force as ForceUpdate,Summary as PubDesc, Url from TC_UpdateInfo 
+                            uinfo = conn.QueryFirstOrDefault<UpdateInfo>(@"select VersionName as DisplayVersion,`Force` as ForceUpdate,Summary as PubDesc, Url from Updates 
                             where DeviceType=@deviceType and VersionCode>@vcode order by VersionCode desc limit 0, 1",
                                 new
                                 {
