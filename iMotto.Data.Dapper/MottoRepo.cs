@@ -198,7 +198,7 @@ namespace iMotto.Data.Dapper
                     
                     if (rowAffected > 0)
                     {
-                        await conn.ExecuteAsync("update Motto set Reviews=Reviews+1 where Id=@MID",
+                        await conn.ExecuteAsync("update Mottos set Reviews=Reviews+1 where Id=@MID",
                             new
                             {
                                 MID = review.MID
