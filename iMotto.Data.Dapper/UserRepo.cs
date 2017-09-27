@@ -327,63 +327,44 @@ namespace iMotto.Data.Dapper
         }
 
         public async Task<List<RelatedUser>> GetUserBansAsync(string userId, int pIndex, int pSize)
-        {
-            var result = new List<RelatedUser>();
-
-            //string sql = @"select t.id,t.UserName,t.DisplayName,t.Thumb,t.Sex, CAST(1 as bit) as IsMutual,t.BanTime,ts.Mottos,ts.Revenue,ts.Follows,ts.Followers from (
-            //    select tu.id, tu.UserName, tu.DisplayName, tu.Thumb, tu.Sex,tf.BanTime, ROW_NUMBER() over(order by tf.BanTime desc) as rn
-            //     from Bans tf, T_Users tu where tf.TUID = tu.Id and tf.SUID = @UID) t, UserStatistics ts where t.Id = ts.UID and t.rn between @start and @end";
+        {            
             using (var conn = _connProvider.GetConnection())
             {
-                var sql = @"select t.id,t.UserName,t.DisplayName,t.Thumb,t.Sex, CAST(1 as bit) as IsMutual,t.BanTime,ts.Mottos,ts.Revenue,ts.Follows,ts.Followers from (
-                    select tu.id, tu.UserName, tu.DisplayName, tu.Thumb, tu.Sex,tf.BanTime from Bans tf, Users tu where tf.TUID = tu.Id and tf.SUID = @UID) t,
-                    Userstatistics ts where t.Id = ts.UID limit @Skip,@Take";
+                var sql = @"select t.Id,t.UserName,t.DisplayName,t.Thumb,t.Sex, false as IsMutual,t.BanTime,ts.Mottos,ts.Revenue,ts.Follows,ts.Followers from (
+                    select tu.Id, tu.UserName, tu.DisplayName, tu.Thumb, tu.Sex,tf.BanTime from Bans tf, Users tu where tf.TUID = tu.Id and tf.SUID = @UID) t,
+                    UserStatistics ts where t.Id = ts.UID limit @Skip,@Take";
 
-                using (var reader = await conn.ExecuteReaderAsync(sql, new
-                {
-                    UID = userId,
-                    Skip = (pIndex - 1) * pSize,
-                    Take = pSize
-                }))
-                {
-                    while (reader.Read())
+                var result = await conn.QueryAsync<RelatedUser>(sql,
+                    new
                     {
-                        RelatedUser user = GetRelatedUserFromReader(reader);
-                        result.Add(user);
-                    }
-                }
-            }
+                        UID = userId,
+                        Skip = (pIndex - 1) * pSize,
+                        Take = pSize
+                    });
 
-            return result;
+                return result.AsList();
+            }
+            
         }
 
         public async Task<List<RelatedUser>> GetFollowerAsync(string uID, int pIndex, int pSize)
         {
-            var result = new List<RelatedUser>();
-
             using (var conn = _connProvider.GetConnection())
             {
-                var sql = @"select t.id,t.UserName,t.DisplayName,t.Thumb,t.Sex,t.isMutual,t.FollowTime,ts.Mottos,ts.Revenue,ts.Follows,ts.Followers from (
-                select tu.id, tu.UserName, tu.DisplayName, tu.Thumb, tu.Sex, tf.IsMutual,tf.FollowTime from Follows tf, Users tu where tf.SUID = tu.Id and tf.TUID=@UID) t,
+                var sql = @"select t.Id,t.UserName,t.DisplayName,t.Thumb,t.Sex,t.IsMutual,t.FollowTime,ts.Mottos,ts.Revenue,ts.Follows,ts.Followers from (
+                select tu.Id, tu.UserName, tu.DisplayName, tu.Thumb, tu.Sex, tf.IsMutual,tf.FollowTime from Follows tf, Users tu where tf.SUID = tu.Id and tf.TUID=@UID) t,
                 UserStatistics ts where t.Id=ts.UID limit @Skip,@Take";
 
-                using (var reader = await conn.ExecuteReaderAsync(sql,
+                var result = await conn.QueryAsync<RelatedUser>(sql,
                     new
                     {
                         UID = uID,
                         Skip = (pIndex - 1) * pSize,
                         Take = pSize
-                    }))
-                {
-                    while (reader.Read())
-                    {
-                        RelatedUser user = GetRelatedUserFromReader(reader);
-                        result.Add(user);
-                    }
-                }
-            }
+                    });
 
-            return result;
+                return result.AsList();
+            }            
         }
 
         private static RelatedUser GetRelatedUserFromReader(IDataReader reader)
@@ -405,31 +386,22 @@ namespace iMotto.Data.Dapper
 
         public async Task<List<RelatedUser>> GetFollowAsync(string uID, int pIndex, int pSize)
         {
-            var result = new List<RelatedUser>();
-
             using (var conn = _connProvider.GetConnection())
             {
-                var sql = @"select t.id,t.UserName,t.DisplayName,t.Thumb,t.Sex,t.isMutual,t.FollowTime,ts.Mottos,ts.Revenue,ts.Follows,ts.Followers from (
-                    select tu.id, tu.UserName, tu.DisplayName, tu.Thumb, tu.Sex, tf.IsMutual,tf.FollowTime from Follows tf,Users tu where tf.TUID = tu.Id and tf.SUID=@uid) t,
+                var sql = @"select t.Id,t.UserName,t.DisplayName,t.Thumb,t.Sex,t.IsMutual,t.FollowTime,ts.Mottos,ts.Revenue,ts.Follows,ts.Followers from (
+                    select tu.Id, tu.UserName, tu.DisplayName, tu.Thumb, tu.Sex, tf.IsMutual,tf.FollowTime from Follows tf,Users tu where tf.TUID = tu.Id and tf.SUID=@UID) t,
                     UserStatistics ts where t.Id=ts.UID limit @Skip,@Take";
 
-                using (var reader = await conn.ExecuteReaderAsync(sql,
-                    new
-                    {
-                        UID = uID,
-                        Skip = (pIndex - 1) * pSize,
-                        Take = pSize
-                    }))
-                {
-                    while (reader.Read())
-                    {
-                        RelatedUser user = GetRelatedUserFromReader(reader);
-                        result.Add(user);
-                    }
-                }
-            }
+                var result = await conn.QueryAsync<RelatedUser>(sql,
+                     new
+                     {
+                         UID = uID,
+                         Skip = (pIndex - 1) * pSize,
+                         Take = pSize
+                     });
 
-            return result;
+                return result.AsList();
+            }
         }
 
 
@@ -730,8 +702,8 @@ namespace iMotto.Data.Dapper
         {
             using (var conn = _connProvider.GetConnection())
             {
-                var sql = @"select u.ID as UID, T.Revenue as Score, u.DisplayName as UserName,u.Thumb as UserThumb, u.Sex from Users u, UserStatistics t 
-                        where T.UID = U.ID order by t.Revenue desc limit 0,100";
+                var sql = @"select u.ID as UID, t.Revenue as Score, u.DisplayName as UserName,u.Thumb as UserThumb, u.Sex from Users u, UserStatistics t 
+                        where t.UID = u.ID order by t.Revenue desc limit 0,100";
                 var tmp = await conn.QueryAsync<UserRank>(sql);
 
                 return tmp.AsList();
@@ -748,8 +720,8 @@ namespace iMotto.Data.Dapper
             {
                 using (var conn = _connProvider.GetConnection())
                 {
-                    var sql = @"select t.UID,T.Score, u.DisplayName as UserName, u.Thumb as UserThumb, u.Sex from UserMonthlyRanks t, Users u
-                        where t.UID=u.Id and T.TheMonth=@TheMonth order by T.Score desc";
+                    var sql = @"select t.UID,t.Score, u.DisplayName as UserName, u.Thumb as UserThumb, u.Sex from UserMonthlyRanks t, Users u
+                        where t.UID=u.Id and t.TheMonth=@TheMonth order by t.Score desc";
 
                     var tmp = await conn.QueryAsync<UserRank>(sql,
                         new
