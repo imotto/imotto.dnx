@@ -41,6 +41,8 @@ namespace iMotto.Data.Dapper
 
                     if (id != 0)
                     {
+                        m.ID = id;
+
                         rowAffected = 1;
                         //var theday = m.AddTime.Year * 10000 + m.AddTime.Month * 100 + m.AddTime.Day;
                         //await conn.ExecuteAsync("update T_DayStatistics set Mottos=Mottos+1 where ID=@theday",
