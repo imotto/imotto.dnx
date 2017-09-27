@@ -28,7 +28,7 @@ namespace iMotto.Data.Dapper
 
                     if (removeFollow)
                     {
-                        await conn.ExecuteAsync("delete Follows where SUID=@SUID and TUID=@TUID",
+                        await conn.ExecuteAsync("delete from Follows where SUID=@SUID and TUID=@TUID",
                             new
                             {
                                 SUID = ban.SUID,

@@ -34,7 +34,7 @@ namespace iMotto.Data.Dapper
 
                     if (removeBan)
                     {
-                        await conn.ExecuteAsync("delete Bans where SUID=@SUID and TUID=@TUID",
+                        await conn.ExecuteAsync("delete from Bans where SUID=@SUID and TUID=@TUID",
                             new { SUID = follow.SUID, TUID = follow.TUID }, tran);
                     }
                     

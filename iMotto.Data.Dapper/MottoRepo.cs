@@ -302,7 +302,7 @@ namespace iMotto.Data.Dapper
                     }
                     else
                     {                        
-                        rowAffected = await conn.ExecuteAsync("delete ReviewVotes where MID=@MID and ReviewID=@ReviewID and UID=@UID", rv, tran);
+                        rowAffected = await conn.ExecuteAsync("delete from ReviewVotes where MID=@MID and ReviewID=@ReviewID and UID=@UID", rv, tran);
                     }
 
                     if (rowAffected > 0)
