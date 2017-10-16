@@ -5,6 +5,8 @@ using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
 
 namespace iMotto.Api.Controllers
 {
@@ -12,11 +14,13 @@ namespace iMotto.Api.Controllers
     public class AdapterController : Controller
     {
         private readonly ILogger _logger;
+        private readonly IHostingEnvironment _env;
         private readonly AdapterFactory _adapterFactory;
 
-        public AdapterController(ILoggerFactory loggerFactory, AdapterFactory adapterFactory)
+        public AdapterController(ILoggerFactory loggerFactory, IHostingEnvironment env, AdapterFactory adapterFactory)
         {
             _logger = loggerFactory.CreateLogger<AdapterController>();
+            _env = env;
             _adapterFactory = adapterFactory;
         }
 
@@ -44,12 +48,52 @@ namespace iMotto.Api.Controllers
             else
             {
                 var model = handler.ObtainModel();
-                
                 await TryUpdateModelAsync(model, model.GetType(), string.Empty);
+
+                if (Request.ContentType.IndexOf("multipart/form-data", StringComparison.OrdinalIgnoreCase) >= 0 &&
+                    Request.Form.Files.Count > 0)
+                {
+                    await TryFillFile(Request.Form.Files, model);
+                }
+
                 return await handler.Handle(model);
             }
-
         }
+
+        private async Task TryFillFile(IFormFileCollection files, HandleRequest model)
+        {
+            foreach (var file in files)
+            {
+                var pName = file.Name;
+
+                var prop = model.GetType().GetProperty(pName);
+                if (prop == null)
+                {
+                    continue;
+                }
+
+                var todayPath = DateTime.Now.ToString("yyyyMMdd");
+
+                var path = Path.Combine(_env.WebRootPath, $"App_Data/{todayPath}");
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+                
+                var ext = Path.GetExtension(file.FileName);
+                var fileName = $"{Guid.NewGuid():N}{ext}";
+                var filePath = Path.Combine(path, fileName);
+                
+                using (var stream = new FileStream(filePath, FileMode.CreateNew))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                prop.SetValue(model, $"{todayPath}/{fileName}");
+            }
+        }
+        
+
 
         private async Task<HandleRequest> TryReadModelAsync(Type type)
         {
