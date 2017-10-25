@@ -1,6 +1,8 @@
 ﻿using iMotto.Cache;
+using iMotto.Service;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using System;
 
@@ -16,6 +18,7 @@ namespace iMotto.Adapter
         public static void AddAdapter(this IServiceCollection services)
         {
             services.AddSingleton<AdapterFactory>();
+            services.TryAddSingleton<ISmsService, DayuSmsService>();
         }
 
         public static void UseSignatureStore(this IApplicationBuilder app)

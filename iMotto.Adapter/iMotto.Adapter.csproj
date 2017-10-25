@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\iMotto.Cache\iMotto.Cache.csproj" />
+    <ProjectReference Include="..\iMotto.Service\iMotto.Service.csproj" />
   </ItemGroup>
 
 </Project>

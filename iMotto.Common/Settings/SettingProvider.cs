@@ -87,6 +87,7 @@ namespace iMotto.Common.Settings
                 RedisConnStr = redisConnStr
             };
         }
+        
 
         //get service method not implemented
     }

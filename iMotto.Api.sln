@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.16
+VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iMotto.Api", "iMotto.Api\iMotto.Api.csproj", "{48E65FA5-20E3-4D5D-A6E8-3C1BB475912B}"
 EndProject
@@ -23,9 +23,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iMotto.Adapter.Common", "iM
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iMotto.Adapter.Users", "iMotto.Adapter.Users\iMotto.Adapter.Users.csproj", "{EC636996-13DB-46D0-AB6F-F31F49E7A0E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iMotto.Adapter.Mottos", "iMotto.Adapter.Mottos\iMotto.Adapter.Mottos.csproj", "{FF554938-6AD3-432A-B947-3541D27C8454}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iMotto.Adapter.Mottos", "iMotto.Adapter.Mottos\iMotto.Adapter.Mottos.csproj", "{FF554938-6AD3-432A-B947-3541D27C8454}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iMotto.Adapter.Readers", "iMotto.Adapter.Readers\iMotto.Adapter.Readers.csproj", "{5B438474-F4CC-4023-B63D-D24635EBB9A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iMotto.Adapter.Readers", "iMotto.Adapter.Readers\iMotto.Adapter.Readers.csproj", "{5B438474-F4CC-4023-B63D-D24635EBB9A9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iMotto.Service", "iMotto.Service\iMotto.Service.csproj", "{2C112CE0-9161-4F47-A16F-86E11969439C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,6 +83,10 @@ Global
 		{5B438474-F4CC-4023-B63D-D24635EBB9A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B438474-F4CC-4023-B63D-D24635EBB9A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5B438474-F4CC-4023-B63D-D24635EBB9A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C112CE0-9161-4F47-A16F-86E11969439C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C112CE0-9161-4F47-A16F-86E11969439C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C112CE0-9161-4F47-A16F-86E11969439C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C112CE0-9161-4F47-A16F-86E11969439C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

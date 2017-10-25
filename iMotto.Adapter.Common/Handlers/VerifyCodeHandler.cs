@@ -4,7 +4,9 @@ using iMotto.Common.Settings;
 using iMotto.Data;
 using iMotto.Data.Entities.Models;
 using iMotto.Events;
+using iMotto.Service;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace iMotto.Adapter.Common
@@ -13,18 +15,21 @@ namespace iMotto.Adapter.Common
     {
         private readonly ISmsSetting _smsSetting;
         private readonly IUserRepo _userRepo;
+        private readonly ISmsService _smsService;
         private readonly IVerifyCodeCache _verifyCodeCache;
         private readonly IEventPublisher _eventPublisher;
         private readonly ILogger _logger;
 
         public VerifyCodeHandler(ISettingProvider settingProvider,
             IUserRepo userRepo,
+            ISmsService smsService,
             ICacheManager cacheManager,
             IEventPublisher eventPublisher,
             ILoggerFactory loggerFactory)
         {
             _smsSetting = settingProvider.GetSmsSetting();
             _userRepo = userRepo;
+            _smsService = smsService;
             _verifyCodeCache = cacheManager.GetCache<IVerifyCodeCache>();
             _eventPublisher = eventPublisher;
             _logger = loggerFactory.CreateLogger<VerifyCodeHandler>();
@@ -65,9 +70,11 @@ namespace iMotto.Adapter.Common
                         Type = VerifyCode.TYPE_REGISTER
                     };
                 }
-                if (SendVCode(reqObj.Mobile, t.Code, _smsSetting.RegisterTemplateId))
-                {
 
+                var sendResult = await SendVCode(reqObj.Mobile, t.Code, _smsSetting.RegisterTemplateId);
+
+                if (sendResult)
+                {
                     _eventPublisher.Publish<SendVerifyCodeEvent>(new SendVerifyCodeEvent
                     {
                         VerifyCode = t
@@ -116,7 +123,9 @@ namespace iMotto.Adapter.Common
                     };
                 }
 
-                if (SendVCode(reqObj.Mobile, t.Code, _smsSetting.ResetPassTemplateId))
+                var sendResult = await SendVCode(reqObj.Mobile, t.Code, _smsSetting.ResetPassTemplateId);
+
+                if (sendResult)
                 {
 
                     _eventPublisher.Publish<SendVerifyCodeEvent>(new SendVerifyCodeEvent
@@ -141,33 +150,20 @@ namespace iMotto.Adapter.Common
                 }
             }
 
-
             return new VerifyCodeResult
             {
                 State = HandleStates.InvalidData,
                 Msg = "请求数据输入有误"
-            };
-
-
+            };            
         }
 
-
-        private bool SendVCode(string mobile, string code, string templateId)
+        private async Task<bool> SendVCode(string mobile, string code, string templateId)
         {
-
-            //ITopClient client = new DefaultTopClient(apiUrl, appKey, appSecret);
-            //AlibabaAliqinFcSmsNumSendRequest req = new AlibabaAliqinFcSmsNumSendRequest();
-            ////req.Extend = "123456";
-            //req.SmsType = "normal";
-            //req.SmsFreeSignName = "偶得";
-            //req.SmsParam = "{\"vcode\":\"" + code + "\"}";
-            //req.RecNum = mobile;
-            //req.SmsTemplateCode = templateId;
-            //AlibabaAliqinFcSmsNumSendResponse rsp = client.Execute(req);
-
-
-            _logger.LogInformation("发送验证码到手机[{0}],[{1}],resp:{2}", mobile, templateId, "rsp.Body");
-            return false;
+            return await _smsService.SendMsg(mobile, templateId,
+                new Dictionary<string, string>
+                {
+                    { "vcode", code }
+                });
         }
     }
 }
