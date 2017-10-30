@@ -44,5 +44,8 @@
         public const string AliOssDirectory = "AliOssDirectory";
         public const string AliOssRegion = "AliOssRegion";
         public const string AliOssRoleArn = "AliOssRoleArn";
+
+
+        public const string OssSettingKey="OssSetting";
     }
 }

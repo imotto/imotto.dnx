@@ -7,6 +7,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
+using iMotto.Service;
 
 namespace iMotto.Api.Controllers
 {
@@ -15,12 +16,17 @@ namespace iMotto.Api.Controllers
     {
         private readonly ILogger _logger;
         private readonly IHostingEnvironment _env;
+        private readonly IObjectStorageService _objectStorageService;
         private readonly AdapterFactory _adapterFactory;
 
-        public AdapterController(ILoggerFactory loggerFactory, IHostingEnvironment env, AdapterFactory adapterFactory)
+        public AdapterController(ILoggerFactory loggerFactory, 
+            IHostingEnvironment env,
+            IObjectStorageService objectStorageService,
+            AdapterFactory adapterFactory)
         {
             _logger = loggerFactory.CreateLogger<AdapterController>();
             _env = env;
+            _objectStorageService = objectStorageService;
             _adapterFactory = adapterFactory;
         }
 
@@ -72,28 +78,33 @@ namespace iMotto.Api.Controllers
                     continue;
                 }
 
-                var todayPath = DateTime.Now.ToString("yyyyMMdd");
+                var path = Path.GetTempPath();
 
-                var path = Path.Combine(_env.WebRootPath, $"App_Data/{todayPath}");
                 if (!Directory.Exists(path))
                 {
                     Directory.CreateDirectory(path);
                 }
-                
+
                 var ext = Path.GetExtension(file.FileName);
                 var fileName = $"{Guid.NewGuid():N}{ext}";
                 var filePath = Path.Combine(path, fileName);
-                
+
                 using (var stream = new FileStream(filePath, FileMode.CreateNew))
                 {
                     await file.CopyToAsync(stream);
                 }
+                try
+                {
+                    var url = _objectStorageService.UploadFile($"{pName}/{fileName}", filePath);
 
-                prop.SetValue(model, $"{todayPath}/{fileName}");
+                    prop.SetValue(model, url);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError("Save file to oss raised an error:{0}", ex.ToString());
+                }
             }
         }
-        
-
 
         private async Task<HandleRequest> TryReadModelAsync(Type type)
         {

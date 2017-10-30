@@ -16,5 +16,7 @@ namespace iMotto.Common.Settings
         IDbSetting GetDbSetting();
 
         ICacheSetting GetCacheSetting();
+
+        IOssSetting GetOssSetting();
     }
 }

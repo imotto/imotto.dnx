@@ -87,7 +87,12 @@ namespace iMotto.Common.Settings
                 RedisConnStr = redisConnStr
             };
         }
-        
+
+        public IOssSetting GetOssSetting()
+        {
+            return GetSetting<OssSetting>(SettingKeys.OssSettingKey).GetAwaiter().GetResult();
+        }
+
 
         //get service method not implemented
     }

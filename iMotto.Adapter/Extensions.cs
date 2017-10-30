@@ -19,6 +19,7 @@ namespace iMotto.Adapter
         {
             services.AddSingleton<AdapterFactory>();
             services.TryAddSingleton<ISmsService, DayuSmsService>();
+            services.TryAddSingleton<IObjectStorageService, AliyunOssService>();
         }
 
         public static void UseSignatureStore(this IApplicationBuilder app)
