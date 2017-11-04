@@ -56,7 +56,8 @@ namespace iMotto.Api.Controllers
                 var model = handler.ObtainModel();
                 await TryUpdateModelAsync(model, model.GetType(), string.Empty);
 
-                if (Request.ContentType.IndexOf("multipart/form-data", StringComparison.OrdinalIgnoreCase) >= 0 &&
+                if (Request.HasFormContentType &&
+                    Request.ContentType.IndexOf("multipart/form-data", StringComparison.OrdinalIgnoreCase) >= 0 &&
                     Request.Form.Files.Count > 0)
                 {
                     await TryFillFile(Request.Form.Files, model);
