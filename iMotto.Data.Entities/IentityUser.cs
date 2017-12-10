@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace iMotto.Data.Entities
 {
@@ -29,5 +26,7 @@ namespace iMotto.Data.Entities
         public List<string> Roles { get; set; }
 
         public string Thumb { get; set; }
+
+        public int Sex { get; set; }
     }
 }

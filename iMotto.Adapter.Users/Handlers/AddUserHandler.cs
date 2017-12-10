@@ -84,6 +84,8 @@ namespace iMotto.Adapter.Users.Handlers
             user.UserName = reqObj.UserName;
             user.PasswordHash = Utils.HashPassword(reqObj.Password);
             user.DisplayName = string.IsNullOrWhiteSpace(reqObj.NickName) ? reqObj.UserName : reqObj.NickName;
+            user.Thumb = string.IsNullOrEmpty(user.Thumb) ? string.Empty : user.Thumb;
+            
 
             var rowAffected= await _userRepo.InsertAsync(user, reqObj.InviteCode);
 

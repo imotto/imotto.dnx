@@ -44,9 +44,9 @@ namespace iMotto.Data.Dapper
                     //if (rowAffected > 0)
                     //{
                     var sql = @"Insert into Users (Id,Email,EmailConfirmed,PasswordHash,SecurityStamp,PhoneNumber,PhoneNumberConfirmed,
-                        TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName,DisplayName,thumb) 
+                        TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName,DisplayName,Thumb,Sex) 
                         Values(@Id,@Email,@EmailConfirmed,@PasswordHash,@SecurityStamp,@PhoneNumber,@PhoneNumberConfirmed,
-                        @TwoFactorAuthEnabled,@LockoutEndDate,@LockoutEnabled,@AccessFailedCount,@UserName,@DisplayName,@thumb)";
+                        @TwoFactorAuthEnabled,@LockoutEndDate,@LockoutEnabled,@AccessFailedCount,@UserName,@DisplayName,@Thumb,@Sex)";
 
                     rowAffected = await conn.ExecuteAsync(sql, user, tran);
 
@@ -741,7 +741,7 @@ namespace iMotto.Data.Dapper
 
             using (var conn = _connProvider.GetConnection())
             {
-                var sql = "select sum(Msgs) from RecentTalks where UID=@UID";
+                var sql = "select ifnull(sum(Msgs),0) from RecentTalks where UID=@UID";
 
                 var result = await conn.QueryFirstOrDefaultAsync<int>(sql,
                     new
