@@ -25,7 +25,7 @@ namespace iMotto.Data.Dapper
             {
 
                 var tmp = await conn.QueryAsync<Notice>(@"select ID,Title,Content,Type,CreateTime as SendTime,State,TargetID,TargetInfo
-                    from Notices where UID=@UID limit @Skip, @Take",
+                    from Notices where UID=@UID Order by ID desc limit @Skip, @Take",
                     new
                     {
                         UID = userId,
@@ -54,7 +54,7 @@ namespace iMotto.Data.Dapper
             using (var conn = _connProvider.GetConnection())
             {
                 var tmp = await conn.QueryAsync<RecentTalk>(@"select WithUID,Content,Direction,LastTime,Msgs 
-                    from RecentTalks where UID=@UID limit @Skip, @Take",
+                    from RecentTalks where UID=@UID order by LastTime desc limit @Skip, @Take",
                     new
                     {
                         UID = uid,
