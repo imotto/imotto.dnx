@@ -33,17 +33,13 @@ namespace iMotto.Adapter.Readers.Handlers
         protected async override Task<HandleResult> HandleCoreAsync(ReadUserMottosRequest reqObj)
         {
             List<Motto> mottos = null;
-            bool isOthers = false;
+            bool isOthers = true;
             var uInfo = _cacheManager.GetCache<IOnlineUserCache>().GetOnlineUserViaSignature(reqObj.Sign);
+            mottos = await _mottoRepo.GetMottosByUserAsync(reqObj.UID, reqObj.PIndex, reqObj.PSize);
+
             if (uInfo != null && uInfo.Item1 == reqObj.UID)
             {
-                mottos = await _mottoRepo.GetMottosByUserAsync(reqObj.UID, reqObj.PIndex, reqObj.PSize);
-            }
-            else
-            {
-                isOthers = true;
-                var skipEvaluatingMottos = true;
-                mottos = await _mottoRepo.GetMottosByUserAsync(reqObj.UID, reqObj.PIndex, reqObj.PSize, skipEvaluatingMottos);
+                isOthers = false;
             }
             
             var data = BuildUserMottoModels(mottos, reqObj.UID);
